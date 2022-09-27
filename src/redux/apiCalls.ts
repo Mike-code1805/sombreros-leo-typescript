@@ -20,8 +20,6 @@ export const login = async (dispatch: Dispatch<AnyAction>, user: User) => {
   dispatch(loginStart());
   console.log('dispatch(loginStart())');
   try {
-    console.log('dispatch(loginSuccess())');
-    console.log('user', user);
     const res = await publicRequest.post('/api/auth/login', user);
     console.log(res.data);
     dispatch(loginSuccess(res.data));

@@ -7,12 +7,12 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import {GradientBackground} from '../components/gradient/GradientBackground';
 import {PropsRedux} from '../interfaces/state';
-import { logout } from '../redux/userRedux';
+import {logout} from '../redux/userRedux';
 import ButtonShared from '../shared/button/ButtonShared';
 
 interface Props extends StackScreenProps<RootStackParams, 'Profile'> {}
 
-const Profile = ({navigation}: Props) => {
+export const Profile = ({navigation}: Props) => {
   const dispatch = useDispatch();
   const stateUser = useSelector((state: PropsRedux) => state.user.currentUser);
 
@@ -24,8 +24,7 @@ const Profile = ({navigation}: Props) => {
       <View style={styles.profile}>
         <View style={styles.profile__container}>
           <Text style={styles.profile__text}>
-            Hola NAME USER este será tu perfil que muy pronto
-            irá mejorando...
+            Hola NAME USER este será tu perfil que muy pronto irá mejorando...
           </Text>
           <ButtonShared
             title="Cerrar Sesión"
@@ -39,13 +38,10 @@ const Profile = ({navigation}: Props) => {
   );
 };
 
-export default Profile;
-
 const styles = StyleSheet.create({
   profile: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.brown_lighter,
     width: '100%',
     height: '100%',
   },

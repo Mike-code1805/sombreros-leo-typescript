@@ -1,3 +1,4 @@
+export {Profile} from './Profile';
 export {Login} from './Login';
 export {Register} from './Register';
 export {Welcome} from './Welcome';

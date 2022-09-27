@@ -7,7 +7,7 @@ const BASE_URL = PORT_DATA;
 console.log(BASE_URL);
 
 export const publicRequest = axios.create({
-  baseURL: `${PORT_DATA}`,
+  baseURL: `http://192.168.2.43:5000`,
 });
 
 axios.defaults.baseURL = PORT_DATA;
