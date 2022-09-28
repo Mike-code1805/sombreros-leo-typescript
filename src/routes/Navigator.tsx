@@ -22,7 +22,7 @@ export const Navigator = () => {
   const stateUser = useSelector((state: PropsRedux) => state.user.currentUser);
   return (
     <Stack.Navigator
-      screenOptions={{
+      screenOptions={{        
         headerTintColor: 'white',
         headerStyle: {
           backgroundColor: color.brown_light,

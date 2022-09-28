@@ -1,4 +1,4 @@
-import { User } from "./interface";
+import {HatProps, LoginUser, User} from './interface';
 
 export interface PropsRedux {
   _persist: Persist;
@@ -14,7 +14,7 @@ export interface Persist {
 
 export interface Hat {
   error: boolean;
-  hats: any[];
+  hats: HatProps[];
   isFetching: boolean;
 }
 
@@ -25,7 +25,7 @@ export interface HatRecicle {
 }
 
 export interface UserStateProps {
-  currentUser: User | null;
+  currentUser: LoginUser;
   isFetching: boolean;
   error: boolean;
 }

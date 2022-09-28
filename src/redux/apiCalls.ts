@@ -18,10 +18,8 @@ import {
 
 export const login = async (dispatch: Dispatch<AnyAction>, user: User) => {
   dispatch(loginStart());
-  console.log('dispatch(loginStart())');
   try {
     const res = await publicRequest.post('/api/auth/login', user);
-    console.log(res.data);
     dispatch(loginSuccess(res.data));
   } catch (err: any) {
     dispatch(loginFailure());
@@ -42,6 +40,7 @@ export const register = async (dispatch: Dispatch<AnyAction>, user: User) => {
 export const getHats = async (dispatch: Dispatch<AnyAction>) => {
   dispatch(getHatStart());
   try {
+    console.log('dispatch(getHatSuccess(res.data)) 1');
     const res = await userRequest.get('/api/hat');
     dispatch(getHatSuccess(res.data));
   } catch (err) {

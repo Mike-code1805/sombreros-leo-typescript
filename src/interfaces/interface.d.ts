@@ -1,17 +1,30 @@
-export interface Hat {
-  name: string;
-  color_hat: string;
+export interface HatProps {
+  _id: string;
+  address: string;
+  advancement: string;
   cintillo: string;
-  tafalete: string;
-  measure: string;
+  color_hat: string;
   color_tape: string;
+  date: string;
+  measure: string;
+  name: string;
+  observations: string;
+  price: string;
   size: string;
   state: string;
-  price: string;
-  advancement: string;
-  address: string;
-  observations: string;
   state_payment: string;
+  tafalete: string;
+  pendiente: boolean;
+}
+
+export interface LoginUser {
+  token: Token;
+}
+
+export interface Token {
+  authToken: string;
+  refreshToken: string;
+  username: string;
 }
 
 export interface User {

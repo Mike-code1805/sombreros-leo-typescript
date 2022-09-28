@@ -1,3 +1,4 @@
+import {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -6,12 +7,26 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  FlatList,
 } from 'react-native';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {ButtonsOpacity} from '../components/buttons/ButtonsOpacity';
+import {useDispatch, useSelector} from 'react-redux';
+import {getHats} from '../redux/apiCalls';
+import {PropsRedux} from '../interfaces/state';
+import {StackScreenProps} from '@react-navigation/stack';
+import {RootStackParams} from '../routes/Navigator';
+import {HatContainer} from '../components/hats/HatContainer';
+import {data} from '../data/data';
 
-export const Hats = ({navigation}: any) => {
+interface Props extends StackScreenProps<RootStackParams, 'Hats'> {}
+
+export const Hats = ({navigation}: Props) => {
+  const dispatch = useDispatch();
+  const hats = useSelector((state: PropsRedux) => state.hat.hats);
+  const user = useSelector((state: PropsRedux) => state.user.currentUser);
+
   const gotoAdd = () => {
     navigation.navigate('AddHat');
   };
@@ -19,6 +34,13 @@ export const Hats = ({navigation}: any) => {
   const gotoRecicle = () => {
     navigation.navigate('Recicle');
   };
+
+  const getHatsRefreshButton = () => {
+    getHats(dispatch);
+    console.log(hats);
+  };
+
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.noteCard}>
@@ -28,59 +50,88 @@ export const Hats = ({navigation}: any) => {
         </View>
       ) : (
         <>
-          <View style={styles.header}>
-            <Text
-              style={styles.header__text}
-              onPress={() => navigation.navigate('Profile')}>
-              Hola *Name*!
-            </Text>
-            <View style={styles.header__icons}>
+          <View style={styles.componentTop}>
+            <View style={styles.header}>
+              <Text
+                style={styles.header__text}
+                onPress={() => navigation.navigate('Profile')}>
+                Hola {user.token.username}!
+              </Text>
+              <View style={styles.header__icons}>
+                <ButtonsOpacity
+                  name="trash-outline"
+                  onPress={gotoRecicle}
+                  circle
+                />
+                <ButtonsOpacity name="add-outline" onPress={gotoAdd} circle />
+              </View>
+            </View>
+            <Text style={styles.noteCard__text}>Total: {hats.length}</Text>
+            <View style={styles.noteCard__divider} />
+            <View style={styles.noteCard__search}>
+              <View style={styles.noteCard__search__input__container}>
+                <TextInput
+                  placeholder="Buscar..."
+                  style={styles.noteCard__search__input}
+                  onChangeText={text => console.log(text)}
+                  placeholderTextColor={color.brown_light}
+                />
+                <TouchableOpacity
+                  style={styles.noteCard__search__button}
+                  onPress={text => console.log(text)}>
+                  <Text
+                    style={
+                      true
+                        ? styles.noteCard__search__button__text__active
+                        : styles.noteCard__search__button__text__inactive
+                    }>
+                    X
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <ButtonsOpacity name="search-outline" />
               <ButtonsOpacity
-                name="trash-outline"
-                onPress={gotoRecicle}
-                circle
+                name="refresh-outline"
+                onPress={() => getHatsRefreshButton()}
               />
-              <ButtonsOpacity name="add-outline" onPress={gotoAdd} circle />
             </View>
           </View>
-          <Text style={styles.noteCard__text}>Total: *Hats Number*</Text>
-          <View style={styles.noteCard__divider} />
-          <View style={styles.noteCard__search}>
-            <View style={styles.noteCard__search__input__container}>
-              <TextInput
-                placeholder="Buscar..."
-                style={styles.noteCard__search__input}
-                onChangeText={text => console.log(text)}
-              />
-              <TouchableOpacity
-                style={styles.noteCard__search__button}
-                onPress={text => console.log(text)}>
-                <Text
-                  style={
-                    true
-                      ? styles.noteCard__search__button__text__active
-                      : styles.noteCard__search__button__text__inactive
-                  }>
-                  X
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <ButtonsOpacity name="search-outline" />
-            <ButtonsOpacity name="refresh-outline" />
-          </View>
-          <ScrollView style={styles.noteCard__scrollView}>
+          <View style={styles.noteCard__scrollView}>
             {false ? (
               <View style={styles.loaderHats}>
                 <TouchableOpacity />
               </View>
-            ) : true ? (
+            ) : hats.length === 0 ? (
               <View style={styles.noteCard__scrollView__empty}>
                 <Text style={styles.noteCard__scrollView__empty__text}>
                   No hay sombreros aún!
                 </Text>
               </View>
-            ) : null}
-          </ScrollView>
+            ) : (
+                <FlatList
+                  data={data.slice().reverse()}
+                  renderItem={({item, index}) => (
+                    <HatContainer
+                      key={item.id}
+                      state={
+                        item.state_payment === 'c'
+                          ? 'Cancelado'
+                          : item.state_payment === 'p' && item.pendiente
+                          ? 'Pendiente'
+                          : 'Trabajado'
+                      }
+                      index={index}
+                      name={item.name}
+                      date={item.date}
+                      onPressMirar={() => console.log('mirar')}
+                      onPressDelete={() => console.log('delete')}
+                    />
+                  )}
+                  keyExtractor={item => item.id.toString()}
+                  horizontal={false}
+                />
+            )}
+          </View>
         </>
       )}
     </View>
@@ -88,6 +139,9 @@ export const Hats = ({navigation}: any) => {
 };
 
 const styles = StyleSheet.create({
+  componentTop: {
+    flex: 2,
+  },
   loader: {
     padding: 100,
     display: 'flex',
@@ -96,9 +150,8 @@ const styles = StyleSheet.create({
   },
   noteCard: {
     padding: 10,
-    marginBottom: 40,
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'column',
   },
   noteCard__text: {
     fontSize: 15,
@@ -121,18 +174,19 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   noteCard__search__container: {
-    backgroundColor: color.brown,
     width: 50,
     height: 45,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 5,
+    color: color.brown_light,
   },
   noteCard__search__input__container: {
     height: 40,
     width: '65%',
     flexDirection: 'row-reverse',
+    color: color.black,
   },
   noteCard__search__input: {
     height: 40,
@@ -142,7 +196,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     opacity: 0.8,
     fontSize: 18,
-    color: color.black,
     shadowColor: color.brown,
     shadowOpacity: 0.4,
     shadowOffset: {
@@ -151,11 +204,11 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 10,
     elevation: 10,
-    backgroundColor: color.white,
     borderColor: color.brown,
     borderWidth: 3,
     borderRadius: 5,
     fontFamily: font.font,
+    color: color.black,
   },
   noteCard__search__button: {
     zIndex: 1,
@@ -231,6 +284,7 @@ const styles = StyleSheet.create({
   },
   noteCard__scrollView: {
     marginBottom: 50,
+    flex: 5,
   },
   noteCard__scrollView__empty: {
     alignItems: 'center',

@@ -9,20 +9,34 @@ import {GradientContext} from '../context/GradientContext';
 import {RootStackParams} from '../routes/Navigator';
 import ButtonShared from '../shared/button/ButtonShared';
 import {GradientBackground} from '../components/gradient/GradientBackground';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PropsRedux} from '../interfaces/state';
+import {useDispatch, useSelector} from 'react-redux';
+import { getHats } from '../redux/apiCalls';
 
 interface Props extends StackScreenProps<RootStackParams, 'Welcome'> {}
 
 export const Welcome = ({navigation}: Props) => {
   const {setMainColors} = useContext(GradientContext);
-
+  const stateUserAuth = useSelector(
+    (state: PropsRedux) => state.user.currentUser,
+  );
+  const dispatch = useDispatch();
+  console.log(stateUserAuth);
   const getPosterColors = async () => {
     const uri = require('../shared/desing/hat.png');
     const [primary = 'green', secondary = 'orange'] = await getImageColors(uri);
     setMainColors({primary, secondary});
   };
 
+  const sendTokenUser = async () => {
+    await AsyncStorage.setItem('token', stateUserAuth.token.authToken);
+  };
+
   useEffect(() => {
     getPosterColors();
+    sendTokenUser();
+    getHats(dispatch);
   }, []);
 
   const handleOnGoSubmitGo = () => {

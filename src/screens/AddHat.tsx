@@ -10,11 +10,15 @@ import AppFormField from '../components/form/AppFormField';
 import AppFormSubmitButton from '../components/form/AppFormSubmitButton';
 import {ButtonsOpacity} from '../components/buttons/ButtonsOpacity';
 import {hatValidaton} from '../validator/hatValidaton';
-import {Hat} from '../interfaces/interface';
+import {HatProps} from '../interfaces/interface';
 import ButtonShared from '../shared/button/ButtonShared';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParams } from '../routes/Navigator';
 
-export const AddHat = ({navigation}: any) => {
-  const handleOnSubmitToAdd = async (values: Hat) => {
+interface Props extends StackScreenProps<RootStackParams, 'AddHat'> {}
+
+export const AddHat = ({navigation}: Props) => {
+  const handleOnSubmitToAdd = async (values: HatProps) => {
     if (values.name === '') {
       Alert.alert('Por favor escribe algo');
     } else {
