@@ -1,10 +1,19 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import {AddHat, Hats, Login, Profile, Recicle, Register} from '../screens';
+import {
+  AddHat,
+  DetailsHat,
+  Hats,
+  Login,
+  Profile,
+  Recicle,
+  Register,
+} from '../screens';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {Welcome} from '../screens/Welcome';
 import {useSelector} from 'react-redux';
 import {PropsRedux} from '../interfaces/state';
+import {HatProps} from '../interfaces/interface';
 
 export type RootStackParams = {
   Hats: undefined;
@@ -14,6 +23,7 @@ export type RootStackParams = {
   Login: undefined;
   Register: undefined;
   Profile: undefined;
+  DetailsHat: HatProps;
 };
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -22,7 +32,7 @@ export const Navigator = () => {
   const stateUser = useSelector((state: PropsRedux) => state.user.currentUser);
   return (
     <Stack.Navigator
-      screenOptions={{        
+      screenOptions={{
         headerTintColor: 'white',
         headerStyle: {
           backgroundColor: color.brown_light,
@@ -71,6 +81,11 @@ export const Navigator = () => {
             name="Profile"
             options={{title: 'Tu Perfil!'}}
             component={Profile}
+          />
+          <Stack.Screen
+            name="DetailsHat"
+            options={{title: 'Detalles'}}
+            component={DetailsHat}
           />
         </>
       )}

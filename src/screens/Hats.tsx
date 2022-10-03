@@ -19,6 +19,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import {HatContainer} from '../components/hats/HatContainer';
 import {data} from '../data/data';
+import {CommonActions} from '@react-navigation/native';
 
 interface Props extends StackScreenProps<RootStackParams, 'Hats'> {}
 
@@ -108,28 +109,32 @@ export const Hats = ({navigation}: Props) => {
                 </Text>
               </View>
             ) : (
-                <FlatList
-                  data={data.slice().reverse()}
-                  renderItem={({item, index}) => (
-                    <HatContainer
-                      key={item.id}
-                      state={
-                        item.state_payment === 'c'
-                          ? 'Cancelado'
-                          : item.state_payment === 'p' && item.pendiente
-                          ? 'Pendiente'
-                          : 'Trabajado'
-                      }
-                      index={index}
-                      name={item.name}
-                      date={item.date}
-                      onPressMirar={() => console.log('mirar')}
-                      onPressDelete={() => console.log('delete')}
-                    />
-                  )}
-                  keyExtractor={item => item.id.toString()}
-                  horizontal={false}
-                />
+              <FlatList
+                data={hats.slice().reverse()}
+                renderItem={({item, index}) => (
+                  <HatContainer
+                    key={item._id}
+                    state={
+                      item.state_payment === 'c'
+                        ? 'Cancelado'
+                        : item.state_payment === 'p' && item.pendiente
+                        ? 'Pendiente'
+                        : 'Trabajado'
+                    }
+                    index={index}
+                    name={item.name}
+                    date={item.date}
+                    onPressMirar={() =>
+                      navigation.dispatch(
+                        CommonActions.navigate('DetailsHat', item),
+                      )
+                    }
+                    onPressDelete={() => console.log('delete')}
+                  />
+                )}
+                keyExtractor={item => item._id!.toString()}
+                horizontal={false}
+              />
             )}
           </View>
         </>

@@ -1,5 +1,4 @@
 import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
 
 import {Field} from 'formik';
 import * as color from '../shared/theme/color';
@@ -12,17 +11,21 @@ import {ButtonsOpacity} from '../components/buttons/ButtonsOpacity';
 import {hatValidaton} from '../validator/hatValidaton';
 import {HatProps} from '../interfaces/interface';
 import ButtonShared from '../shared/button/ButtonShared';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParams } from '../routes/Navigator';
+import {StackScreenProps} from '@react-navigation/stack';
+import {RootStackParams} from '../routes/Navigator';
+import {useDispatch} from 'react-redux';
+import createHatService from '../services/createHatService';
 
 interface Props extends StackScreenProps<RootStackParams, 'AddHat'> {}
 
 export const AddHat = ({navigation}: Props) => {
-  const handleOnSubmitToAdd = async (values: HatProps) => {
+  const dispatch = useDispatch();
+
+  const handleOnSubmitToAdd = (values: HatProps) => {
     if (values.name === '') {
       Alert.alert('Por favor escribe algo');
     } else {
-      const objectToSent = {
+      const objectToSent: HatProps = {
         name: values.name,
         color_hat: values.color_hat,
         cintillo: values.cintillo,
@@ -39,7 +42,8 @@ export const AddHat = ({navigation}: Props) => {
         date: format(new Date(), 'yyyy-MM-dd, H:mma'),
         pendiente: true,
       };
-      console.log(objectToSent);
+      createHatService(objectToSent);
+      navigation.navigate('Hats');
     }
   };
 

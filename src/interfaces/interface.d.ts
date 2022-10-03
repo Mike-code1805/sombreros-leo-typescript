@@ -1,5 +1,5 @@
 export interface HatProps {
-  _id: string;
+  _id?: string;
   address: string;
   advancement: string;
   cintillo: string;

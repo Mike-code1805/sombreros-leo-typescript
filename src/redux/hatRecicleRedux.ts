@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Hat } from '../interfaces/state';
 
 export const hatRecicleSlice = createSlice({
   name: "hatRecicle",
