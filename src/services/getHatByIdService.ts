@@ -1,7 +1,6 @@
-import userRequest from "../requestMethods";
+import userRequest from '../api/requestMethods';
 
-
-const getHatByIdService = async (id) => {
+const getHatByIdService = async (id: string) => {
   try {
     const data = await userRequest.get(`/api/hat/${id}`);
     return data;

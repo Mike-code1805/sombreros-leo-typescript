@@ -1,6 +1,6 @@
-import userRequest from "../../requestMethods";
+import userRequest from '../../api/requestMethods';
 
-const deleteHatRecicleService = async (id) => {
+const deleteHatRecicleService = async (id: string) => {
   try {
     const data = await userRequest.delete(`/api/hatRecicle/${id}`);
     return data;
