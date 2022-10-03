@@ -1,4 +1,4 @@
-import {StackScreenProps} from '@react-navigation/stack';
+import {useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -7,26 +7,29 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {data} from '../data/data';
+import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {CommonActions} from '@react-navigation/native';
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailsHat'> {}
 
 export const DetailsHat = ({navigation, route}: Props) => {
+  const [isDone, setIsDone] = useState(false);
+
   const onPressState_Payment = async () => {
     try {
-      console.log(route.params)
+      console.log(route.params);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const onPressPendiente = async () => {
+  const onPressDone = async () => {
     try {
-      console.log('onPressPendiente');
+      setIsDone(true);
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +53,9 @@ export const DetailsHat = ({navigation, route}: Props) => {
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Color de Sombrero: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.color_hat}</Text>
+            <Text style={styles.detailsHat__text}>
+              {route.params.color_hat}
+            </Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Cintillo: </Text>
@@ -62,11 +67,15 @@ export const DetailsHat = ({navigation, route}: Props) => {
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Medida: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.measure}cm</Text>
+            <Text style={styles.detailsHat__text}>
+              {route.params.measure}cm
+            </Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Color de Cinta: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.color_tape}</Text>
+            <Text style={styles.detailsHat__text}>
+              {route.params.color_tape}
+            </Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Tamaño: </Text>
@@ -92,9 +101,11 @@ export const DetailsHat = ({navigation, route}: Props) => {
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Observaciones: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.observations}</Text>
+            <Text style={styles.detailsHat__text}>
+              {route.params.observations}
+            </Text>
           </View>
-          {route.params.pendiente ? (
+          {route.params.state_payment === 'p' ? (
             <View style={styles.detailsHat__container}>
               <Text style={styles.detailsHat__textData__worked}>
                 Pendiente De Trabajarlo
@@ -120,21 +131,28 @@ export const DetailsHat = ({navigation, route}: Props) => {
       <View style={styles.detailsButtons}>
         <TouchableOpacity
           style={styles.prdetailsButtons__edit}
-          onPress={() => navigation.navigate('Hats')}>
+          onPress={() =>
+            navigation.dispatch(CommonActions.navigate('EdiHat', route.params))
+          }>
           <Icon name="create" color="white" size={23} />
           <Text style={styles.detailsButtons__style__text}>Editar</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.prdetailsButtons__pay}
-          disabled={true ? false : true}
+          disabled={route.params.pendiente ? false : true}
           onPress={onPressState_Payment}>
           <Icon name="thumbs-up" color="white" size={23} />
           <Text style={styles.detailsButtons__style__text}>Entregado</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.prdetailsButtons__work}
-          disabled={true ? false : true}
-          onPress={onPressPendiente}>
+          disabled={
+            route.params.state_payment === 't' ||
+            route.params.state_payment === 'c'
+              ? true
+              : false
+          }
+          onPress={onPressDone}>
           <Icon name="hammer" color="white" size={23} />
           <Text style={styles.detailsButtons__style__text}>Trabajado</Text>
         </TouchableOpacity>

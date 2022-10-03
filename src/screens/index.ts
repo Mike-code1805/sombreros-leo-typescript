@@ -1,3 +1,4 @@
+export {EdiHat} from './EdiHat';
 export {DetailsHat} from './DetailsHat';
 export {Profile} from './Profile';
 export {Login} from './Login';

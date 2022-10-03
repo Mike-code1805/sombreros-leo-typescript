@@ -1,31 +1,36 @@
-import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
-
+import {StackScreenProps} from '@react-navigation/stack';
 import {Field} from 'formik';
-import * as color from '../shared/theme/color';
-import * as font from '../shared/theme/font';
-import {format} from 'date-fns';
+import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
 import AppForm from '../components/form/AppForm';
 import AppFormField from '../components/form/AppFormField';
 import AppFormSubmitButton from '../components/form/AppFormSubmitButton';
-import {ButtonsOpacity} from '../components/buttons/ButtonsOpacity';
-import {hatValidaton} from '../validator/hatValidaton';
 import {HatProps} from '../interfaces/interface';
-import ButtonShared from '../shared/button/ButtonShared';
-import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
-import {useDispatch} from 'react-redux';
-import createHatService from '../services/createHatService';
+import ButtonShared from '../shared/button/ButtonShared';
+import {hatValidaton} from '../validator/hatValidaton';
+import * as color from '../shared/theme/color';
+import * as font from '../shared/theme/font';
+import {equalsObsjects} from '../functions/equalsObsjects';
 
-interface Props extends StackScreenProps<RootStackParams, 'AddHat'> {}
+interface Props extends StackScreenProps<RootStackParams, 'EdiHat'> {}
 
-export const AddHat = ({navigation}: Props) => {
-  const dispatch = useDispatch();
-
-  const handleOnSubmitToAdd = (values: HatProps) => {
-    if (values.name === '') {
-      Alert.alert('Por favor escribe algo');
+export const EdiHat = ({navigation, route}: Props) => {
+  const data1 = {
+    id: '1',
+    name: 'edit',
+  };
+  const data2 = {
+    id: '1',
+    name: 'edit',
+  };
+  const handleOnSubmitToEdit = async (values: HatProps) => {
+    if (!equalsObsjects(values, route.params)) {
+      console.log(true);
+      console.log({values});
+      console.log(route.params);
+      console.log('NOT PASS TEST');
     } else {
-      const objectToSent: HatProps = {
+      const objectToSent = {
         name: values.name,
         color_hat: values.color_hat,
         cintillo: values.cintillo,
@@ -39,93 +44,104 @@ export const AddHat = ({navigation}: Props) => {
         address: values.address,
         observations: values.observations,
         state_payment: values.state_payment.toLowerCase(),
-        date: format(new Date(), 'yyyy-MM-dd, H:mma'),
+        date: values.date,
         pendiente: true,
       };
-      createHatService(objectToSent);
-      navigation.navigate('Hats');
+      console.log(objectToSent);
+      console.log('PASS TEST');
     }
   };
-
-  const gotoAdd = () => {
-    navigation.navigate('Hats');
-  };
-
   return (
     <ScrollView style={styles.addHat}>
       <AppForm
         initialValues={{
-          name: '',
-          color_hat: '',
-          cintillo: '',
-          tafalete: '',
-          measure: '',
-          color_tape: '',
-          size: '',
-          state: '',
-          price: '0',
-          advancement: '0',
-          address: '',
-          observations: '',
-          state_payment: '',
+          name: route.params.name,
+          color_hat: route.params.color_hat,
+          cintillo: route.params.cintillo,
+          tafalete: route.params.tafalete,
+          measure: route.params.measure,
+          color_tape: route.params.color_tape,
+          size: route.params.size,
+          state: route.params.state,
+          price: route.params.price,
+          advancement: route.params.advancement,
+          address: route.params.address,
+          observations: route.params.observations,
+          state_payment: route.params.state_payment,
         }}
         validationSchema={hatValidaton}
-        onSubmit={handleOnSubmitToAdd}>
+        onSubmit={handleOnSubmitToEdit}>
         <Text style={styles.addHat__text}>Nombre: </Text>
-        <Field component={AppFormField} name="name" placeholder="Nombre" />
+        <Field
+          component={AppFormField}
+          name="name"
+          placeholder={route.params.name}
+        />
         <Text style={styles.addHat__text}>Color de Sombrero: </Text>
         <Field
           component={AppFormField}
           name="color_hat"
-          placeholder="Color de Sombrero"
+          placeholder={route.params.color_hat}
         />
         <Text style={styles.addHat__text}>Cintillo (si) (no): </Text>
         <Field
           component={AppFormField}
           name="cintillo"
-          placeholder="Cintillo"
+          placeholder={route.params.cintillo}
         />
         <Text style={styles.addHat__text}>Tafalete (si) (no): </Text>
         <Field
           component={AppFormField}
           name="tafalete"
-          placeholder="Tafalete"
+          placeholder={route.params.tafalete}
         />
         <Text style={styles.addHat__text}>Medida(cm): </Text>
         <Field
           component={AppFormField}
           name="measure"
-          placeholder="Medida(cm)"
+          placeholder={`${route.params.measure}cm`}
         />
         <Text style={styles.addHat__text}>Color de Cinta: </Text>
         <Field
           component={AppFormField}
           name="color_tape"
-          placeholder="Color de Cinta"
+          placeholder={`${route.params.color_tape}`}
         />
         <Text style={styles.addHat__text}>Tamaño: </Text>
-        <Field component={AppFormField} name="size" placeholder="Tamaño" />
+        <Field
+          component={AppFormField}
+          name="size"
+          placeholder={`${route.params.size}`}
+        />
         <Text style={styles.addHat__text}>Estado (1°) (2°) (3°) (4°): </Text>
-        <Field component={AppFormField} name="state" placeholder="Estado" />
+        <Field
+          component={AppFormField}
+          name="state"
+          placeholder={`${route.params.state}°`}
+        />
         <Text style={styles.addHat__text}>Precio (S/.): </Text>
-        <Field component={AppFormField} name="price" placeholder="Precio" />
+        <Field
+          component={AppFormField}
+          name="price"
+          placeholder={`S/.${route.params.price}`}
+        />
         <Text style={styles.addHat__text}>Adelanto (S/.): </Text>
         <Field
           component={AppFormField}
           name="advancement"
-          placeholder="Adelanto"
+          placeholder={`S/.${route.params.advancement}`}
         />
         <Text style={styles.addHat__text}>Domicilio: </Text>
         <Field
           component={AppFormField}
           name="address"
-          placeholder="Domicilio"
+          placeholder={`${route.params.color_tape}`}
         />
         <Text style={styles.addHat__text}>Observaciones: </Text>
         <Field
           component={AppFormField}
           name="observations"
-          placeholder="Observaciones"
+          placeholder={`${route.params.color_tape}`}
         />
         <View style={styles.addHat__container}>
           <Text style={styles.addHat__text}>Estado Pago: </Text>
@@ -138,12 +154,16 @@ export const AddHat = ({navigation}: Props) => {
         <Field
           component={AppFormField}
           name="state_payment"
-          placeholder="Estado de Pago"
+          placeholder={`${route.params.color_tape}`}
         />
-        <AppFormSubmitButton title="Agregar" />
+        <AppFormSubmitButton title="Editar" />
       </AppForm>
       <View style={styles.addHat__buttonClear}>
-        <ButtonShared onPress={gotoAdd} title="Cancelar" color="red" />
+        <ButtonShared
+          onPress={() => navigation.goBack()}
+          title="Cancelar"
+          color="red"
+        />
       </View>
     </ScrollView>
   );

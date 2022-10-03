@@ -117,9 +117,9 @@ export const Hats = ({navigation}: Props) => {
                     state={
                       item.state_payment === 'c'
                         ? 'Cancelado'
-                        : item.state_payment === 'p' && item.pendiente
-                        ? 'Pendiente'
-                        : 'Trabajado'
+                        : item.state_payment === 't'
+                        ? 'Trabajado'
+                        : 'Pendiente'
                     }
                     index={index}
                     name={item.name}

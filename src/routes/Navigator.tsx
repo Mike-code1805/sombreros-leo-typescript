@@ -2,6 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {
   AddHat,
   DetailsHat,
+  EdiHat,
   Hats,
   Login,
   Profile,
@@ -24,6 +25,7 @@ export type RootStackParams = {
   Register: undefined;
   Profile: undefined;
   DetailsHat: HatProps;
+  EdiHat: HatProps;
 };
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -86,6 +88,11 @@ export const Navigator = () => {
             name="DetailsHat"
             options={{title: 'Detalles'}}
             component={DetailsHat}
+          />
+          <Stack.Screen
+            name="EdiHat"
+            options={{title: 'Editar Sombrero'}}
+            component={EdiHat}
           />
         </>
       )}
