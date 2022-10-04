@@ -1,9 +1,6 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {Field} from 'formik';
 import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
-import AppForm from '../components/form/AppForm';
-import AppFormField from '../components/form/AppFormField';
-import AppFormSubmitButton from '../components/form/AppFormSubmitButton';
 import {HatProps} from '../interfaces/interface';
 import {RootStackParams} from '../routes/Navigator';
 import ButtonShared from '../shared/button/ButtonShared';
@@ -11,24 +8,20 @@ import {hatValidaton} from '../validator/hatValidaton';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {equalsObsjects} from '../functions/equalsObsjects';
+import editHatService from '../services/editHatService';
+import {getHats} from '../redux/apiCalls';
+import {useDispatch} from 'react-redux';
+import {CommonActions} from '@react-navigation/native';
+import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 
 interface Props extends StackScreenProps<RootStackParams, 'EdiHat'> {}
 
 export const EdiHat = ({navigation, route}: Props) => {
-  const data1 = {
-    id: '1',
-    name: 'edit',
-  };
-  const data2 = {
-    id: '1',
-    name: 'edit',
-  };
+  const dispatch = useDispatch();
+
   const handleOnSubmitToEdit = async (values: HatProps) => {
-    if (!equalsObsjects(values, route.params)) {
-      console.log(true);
-      console.log({values});
-      console.log(route.params);
-      console.log('NOT PASS TEST');
+    if (equalsObsjects(values, route.params)) {
+      Alert.alert('Por favor escriba lo que desea editar');
     } else {
       const objectToSent = {
         name: values.name,
@@ -44,11 +37,12 @@ export const EdiHat = ({navigation, route}: Props) => {
         address: values.address,
         observations: values.observations,
         state_payment: values.state_payment.toLowerCase(),
-        date: values.date,
+        date: route.params.date,
         pendiente: true,
       };
-      console.log(objectToSent);
-      console.log('PASS TEST');
+      await editHatService(route.params._id!, objectToSent);
+      getHats(dispatch);
+      navigation.dispatch(CommonActions.navigate('DetailsHat', objectToSent));
     }
   };
   return (
@@ -68,6 +62,8 @@ export const EdiHat = ({navigation, route}: Props) => {
           address: route.params.address,
           observations: route.params.observations,
           state_payment: route.params.state_payment,
+          pendiente: route.params.pendiente,
+          date: route.params.date,
         }}
         validationSchema={hatValidaton}
         onSubmit={handleOnSubmitToEdit}>
@@ -113,7 +109,7 @@ export const EdiHat = ({navigation, route}: Props) => {
           name="size"
           placeholder={`${route.params.size}`}
         />
-        <Text style={styles.addHat__text}>Estado (1°) (2°) (3°) (4°): </Text>
+        <Text style={styles.addHat__text}>Estado (1°) (2°) (3°) (4°) (5°): </Text>
         <Field
           component={AppFormField}
           name="state"

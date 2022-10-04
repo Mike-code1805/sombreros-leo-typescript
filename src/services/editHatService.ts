@@ -1,7 +1,7 @@
 import userRequest from '../api/requestMethods';
-import {Hat} from '../interfaces/state';
+import { HatProps } from '../interfaces/interface';
 
-const editHatService = async (id: string, data: Hat) => {
+const editHatService = async (id: string, data: HatProps) => {
   try {
     const res = await userRequest.put(`/api/hat/${id}`, data);
     return res.data;

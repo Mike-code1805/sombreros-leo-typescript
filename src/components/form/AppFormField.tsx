@@ -20,7 +20,7 @@ interface FormProps {
   setFieldTouched: any;
 }
 
-const AppFormField = (props: Props) => {
+export const AppFormField = (props: Props) => {
   const {
     placeholder,
     field: {name, onBlur, onChange, value},
@@ -49,8 +49,6 @@ const AppFormField = (props: Props) => {
     </View>
   );
 };
-
-export default AppFormField;
 
 const styles = StyleSheet.create({
   container: {

@@ -25,7 +25,7 @@ export type RootStackParams = {
   Register: undefined;
   Profile: undefined;
   DetailsHat: HatProps;
-  EdiHat: HatProps;
+  EdiHat: HatProps;  
 };
 
 const Stack = createStackNavigator<RootStackParams>();

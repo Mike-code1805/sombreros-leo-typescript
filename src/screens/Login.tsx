@@ -4,15 +4,13 @@ import {Alert, StyleSheet, Text, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
-import AppForm from '../components/form/AppForm';
 import {loginValidation} from '../validator/loginValidation';
-import AppFormField from '../components/form/AppFormField';
-import AppFormSubmitButton from '../components/form/AppFormSubmitButton';
 import ButtonShared from '../shared/button/ButtonShared';
 import {User} from '../interfaces/interface';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {PropsRedux} from '../interfaces/state';
-import { login } from '../redux/apiCalls';
+import {login} from '../redux/apiCalls';
+import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 
 interface Props extends StackScreenProps<RootStackParams, 'Login'> {}
 

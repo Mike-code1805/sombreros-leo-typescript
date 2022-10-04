@@ -1,15 +1,15 @@
 import React from 'react';
 import {Formik} from 'formik';
-import {Hat, User} from '../../interfaces/interface';
+import {HatProps, User} from '../../interfaces/interface';
 
 interface Props {
-  initialValues: Hat | User;
+  initialValues: HatProps | User;
   onSubmit: any;
   validationSchema: any;
   children: JSX.Element[];
 }
 
-const AppForm = ({
+export const AppForm = ({
   initialValues,
   onSubmit,
   validationSchema,
@@ -24,5 +24,3 @@ const AppForm = ({
     </Formik>
   );
 };
-
-export default AppForm;

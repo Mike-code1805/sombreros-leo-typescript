@@ -8,6 +8,7 @@ interface Props {
   name?: string;
   date?: string;
   toSee?: boolean;
+  title?: string;
   onPressMirar(): void | undefined;
   onPressDelete(): void | undefined;
 }
@@ -18,6 +19,7 @@ export const HatContainer = ({
   name,
   date,
   toSee = true,
+  title = 'Mirar',
   onPressMirar,
   onPressDelete,
 }: Props) => {
@@ -68,7 +70,7 @@ export const HatContainer = ({
             {toSee ? (
               <Text
                 style={styles.hatContainer__container__note__date__edit__text}>
-                Mirar
+                {title}
               </Text>
             ) : (
               <Text

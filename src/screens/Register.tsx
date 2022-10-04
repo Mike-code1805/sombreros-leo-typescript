@@ -1,13 +1,11 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {Field} from 'formik';
 import {Alert, StyleSheet, Text, View} from 'react-native';
-import AppForm from '../components/form/AppForm';
-import AppFormField from '../components/form/AppFormField';
 import {RootStackParams} from '../routes/Navigator';
 import {registerValidation} from '../validator/registerValidation';
-import AppFormSubmitButton from '../components/form/AppFormSubmitButton';
 import ButtonShared from '../shared/button/ButtonShared';
 import {User} from '../interfaces/interface';
+import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 
 interface Props extends StackScreenProps<RootStackParams, 'Register'> {}
 

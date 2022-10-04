@@ -1,7 +1,6 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {
   ActivityIndicator,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -18,7 +17,6 @@ import {PropsRedux} from '../interfaces/state';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import {HatContainer} from '../components/hats/HatContainer';
-import {data} from '../data/data';
 import {CommonActions} from '@react-navigation/native';
 
 interface Props extends StackScreenProps<RootStackParams, 'Hats'> {}
@@ -27,14 +25,6 @@ export const Hats = ({navigation}: Props) => {
   const dispatch = useDispatch();
   const hats = useSelector((state: PropsRedux) => state.hat.hats);
   const user = useSelector((state: PropsRedux) => state.user.currentUser);
-
-  const gotoAdd = () => {
-    navigation.navigate('AddHat');
-  };
-
-  const gotoRecicle = () => {
-    navigation.navigate('Recicle');
-  };
 
   const getHatsRefreshButton = () => {
     getHats(dispatch);
@@ -61,10 +51,14 @@ export const Hats = ({navigation}: Props) => {
               <View style={styles.header__icons}>
                 <ButtonsOpacity
                   name="trash-outline"
-                  onPress={gotoRecicle}
+                  onPress={() => navigation.navigate('Recicle')}
                   circle
                 />
-                <ButtonsOpacity name="add-outline" onPress={gotoAdd} circle />
+                <ButtonsOpacity
+                  name="add-outline"
+                  onPress={() => navigation.navigate('AddHat')}
+                  circle
+                />
               </View>
             </View>
             <Text style={styles.noteCard__text}>Total: {hats.length}</Text>

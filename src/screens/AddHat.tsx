@@ -4,9 +4,6 @@ import {Field} from 'formik';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {format} from 'date-fns';
-import AppForm from '../components/form/AppForm';
-import AppFormField from '../components/form/AppFormField';
-import AppFormSubmitButton from '../components/form/AppFormSubmitButton';
 import {ButtonsOpacity} from '../components/buttons/ButtonsOpacity';
 import {hatValidaton} from '../validator/hatValidaton';
 import {HatProps} from '../interfaces/interface';
@@ -15,6 +12,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import {useDispatch} from 'react-redux';
 import createHatService from '../services/createHatService';
+import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 
 interface Props extends StackScreenProps<RootStackParams, 'AddHat'> {}
 
@@ -68,6 +66,8 @@ export const AddHat = ({navigation}: Props) => {
           address: '',
           observations: '',
           state_payment: '',
+          date: '',
+          pendiente: true,
         }}
         validationSchema={hatValidaton}
         onSubmit={handleOnSubmitToAdd}>
@@ -105,7 +105,7 @@ export const AddHat = ({navigation}: Props) => {
         />
         <Text style={styles.addHat__text}>Tamaño: </Text>
         <Field component={AppFormField} name="size" placeholder="Tamaño" />
-        <Text style={styles.addHat__text}>Estado (1°) (2°) (3°) (4°): </Text>
+        <Text style={styles.addHat__text}>Estado (1°) (2°) (3°) (4°) (5°): </Text>
         <Field component={AppFormField} name="state" placeholder="Estado" />
         <Text style={styles.addHat__text}>Precio (S/.): </Text>
         <Field component={AppFormField} name="price" placeholder="Precio" />

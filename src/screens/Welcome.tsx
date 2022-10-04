@@ -12,7 +12,7 @@ import {GradientBackground} from '../components/gradient/GradientBackground';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PropsRedux} from '../interfaces/state';
 import {useDispatch, useSelector} from 'react-redux';
-import { getHats } from '../redux/apiCalls';
+import { getHats, getHatsRecicle } from '../redux/apiCalls';
 
 interface Props extends StackScreenProps<RootStackParams, 'Welcome'> {}
 
@@ -37,6 +37,7 @@ export const Welcome = ({navigation}: Props) => {
     getPosterColors();
     sendTokenUser();
     getHats(dispatch);
+    getHatsRecicle(dispatch);
   }, []);
 
   const handleOnGoSubmitGo = () => {
