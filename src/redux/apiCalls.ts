@@ -43,6 +43,7 @@ export const getHats = async (dispatch: Dispatch<AnyAction>) => {
     const res = await userRequest.get('/api/hat');
     dispatch(getHatSuccess(res.data));
   } catch (err) {
+    console.log('error apicalls')
     dispatch(getHatFailure());
   }
 };

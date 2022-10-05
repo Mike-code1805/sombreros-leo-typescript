@@ -27,8 +27,8 @@ export const Register = ({navigation}: Props) => {
           passwordConfirmation: values.passwordConfirmation,
         };
         await register(dispatch, objectToSent);
-        console.log(userState)
-        if (userState.error) {
+        console.log(userState);
+        if (userState.error || userState.currentUser === null) {
           Alert.alert(
             'ERROR: Usuario no Registrado D: pruebe usar otro Nombre de Usuario',
           );
