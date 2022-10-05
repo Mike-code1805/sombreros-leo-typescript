@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../interfaces/interface";
 
 const userSlice = createSlice({
   name: "user",
@@ -15,6 +14,7 @@ const userSlice = createSlice({
     loginSuccess: (state, action) => {
       state.isFetching = false;
       state.currentUser = action.payload;
+      state.error = false;
     },
     loginFailure: (state) => {
       state.isFetching = false;

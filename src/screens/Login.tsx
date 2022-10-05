@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import {Field} from 'formik';
 import {Alert, StyleSheet, Text, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
@@ -25,13 +24,14 @@ export const Login = ({navigation}: Props) => {
         password: user.password,
       };
       await login(dispatch, objectToSent);
+      console.log(stateUser);
       if (!stateUser.error) {
         navigation.dispatch(StackActions.replace('Welcome'));
       } else {
-        console.log('Error');
+        Alert.alert('Nombre de Usuario o Contraseña Incorrectas');
       }
     } catch (error) {
-      console.log('Error Login');
+      Alert.alert('Nombre de Usuario o Contraseña Incorrectas');
     }
   };
 

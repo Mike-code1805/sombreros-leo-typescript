@@ -7,7 +7,7 @@ import ButtonShared from '../shared/button/ButtonShared';
 import {User} from '../interfaces/interface';
 import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 import {useDispatch, useSelector} from 'react-redux';
-import {register} from '../redux/apiCalls';
+import {login, register} from '../redux/apiCalls';
 import {PropsRedux} from '../interfaces/state';
 
 interface Props extends StackScreenProps<RootStackParams, 'Register'> {}
@@ -27,13 +27,17 @@ export const Register = ({navigation}: Props) => {
           passwordConfirmation: values.passwordConfirmation,
         };
         await register(dispatch, objectToSent);
-        console.log(userState);
-        if (!userState.error) {
-          navigation.navigate('Login');
+        console.log(userState)
+        if (userState.error) {
+          Alert.alert(
+            'ERROR: Usuario no Registrado D: pruebe usar otro Nombre de Usuario',
+          );
+        } else {
+          await login(dispatch, objectToSent);
         }
       }
     } catch (error) {
-      console.log('Error Register');
+      Alert.alert('ERROR: Usuario no Registrado D:');
     }
   };
 
