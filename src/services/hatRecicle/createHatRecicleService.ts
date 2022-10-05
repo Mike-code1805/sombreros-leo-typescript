@@ -1,7 +1,7 @@
 import userRequest from '../../api/requestMethods';
-import {Hat} from '../../interfaces/state';
+import { HatProps } from '../../interfaces/interface';
 
-const createHatRecicleService = async (hat: Hat) => {
+const createHatRecicleService = async (hat: HatProps) => {
   try {
     await userRequest.post(`/api/hatRecicle/`, hat);
   } catch (error) {

@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -7,17 +7,23 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  Alert,
 } from 'react-native';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {ButtonsOpacity} from '../components/buttons/ButtonsOpacity';
 import {useDispatch, useSelector} from 'react-redux';
-import {getHats} from '../redux/apiCalls';
+import {getHats, getHatsRecicle} from '../redux/apiCalls';
 import {PropsRedux} from '../interfaces/state';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import {HatContainer} from '../components/hats/HatContainer';
 import {CommonActions} from '@react-navigation/native';
+import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
+import createHatRecicleService from '../services/hatRecicle/createHatRecicleService';
+import {HatProps} from '../interfaces/interface';
+import deleteHatService from '../services/deleteHatService';
+import {useNetInfo} from '../hooks/useNetInfo';
 
 interface Props extends StackScreenProps<RootStackParams, 'Hats'> {}
 
@@ -25,10 +31,44 @@ export const Hats = ({navigation}: Props) => {
   const dispatch = useDispatch();
   const hats = useSelector((state: PropsRedux) => state.hat.hats);
   const user = useSelector((state: PropsRedux) => state.user.currentUser);
+  const {network} = useNetInfo();
 
   const getHatsRefreshButton = () => {
     getHats(dispatch);
     console.log(hats);
+  };
+
+  const onPressDelete = (item: HatProps) => {
+    console.log('delete');
+    try {
+      Alert.alert(
+        'Borrar sombrero',
+        '¿Estás seguro que deseas llevar el sombrero a la papelera de reciclaje?',
+        [
+          {
+            text: 'No',
+            onPress: () => console.log('cancelado'),
+            style: 'cancel',
+          },
+          {
+            text: 'Si',
+            onPress: () => {
+              if (network) {
+                console.log(network);
+                createHatRecicleService(item);
+                deleteHatService(item._id!);
+                getHats(dispatch);
+              } else {
+                console.log(network);
+                Alert.alert('Usted no está conectado a internet');
+              }
+            },
+          },
+        ],
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {}, []);
@@ -51,7 +91,10 @@ export const Hats = ({navigation}: Props) => {
               <View style={styles.header__icons}>
                 <ButtonsOpacity
                   name="trash-outline"
-                  onPress={() => navigation.navigate('Recicle')}
+                  onPress={() => {
+                    getHatsRecicle(dispatch);
+                    navigation.navigate('Recicle');
+                  }}
                   circle
                 />
                 <ButtonsOpacity
@@ -123,7 +166,7 @@ export const Hats = ({navigation}: Props) => {
                         CommonActions.navigate('DetailsHat', item),
                       )
                     }
-                    onPressDelete={() => console.log('delete')}
+                    onPressDelete={() => onPressDelete(item)}
                   />
                 )}
                 keyExtractor={item => item._id!.toString()}

@@ -5,24 +5,34 @@ import * as font from '../shared/theme/font';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import {ButtonRecicle} from '../components/buttons/ButtonRecicle';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {PropsRedux} from '../interfaces/state';
 import {HatContainer} from '../components/hats/HatContainer';
+import createHatService from '../services/createHatService';
+import deleteHatRecicleService from '../services/hatRecicle/deleteHatRecicleService';
+import {getHatsRecicle} from '../redux/apiCalls';
+import {useNetInfo} from '../hooks/useNetInfo';
 
 interface Props extends StackScreenProps<RootStackParams, 'Recicle'> {}
 
 export const Recicle = ({navigation}: Props) => {
+  const dispatch = useDispatch();
+  const {network} = useNetInfo();
+
   const hatsRecicle = useSelector(
     (state: PropsRedux) => state.hatRecicle.hatsRecicle,
   );
-  console.log(hatsRecicle);
+  const onPressRefresh = () => {
+    getHatsRecicle(dispatch);
+    console.log(hatsRecicle);
+  };
   return (
     <View style={styles.r}>
       <View style={styles.reci}>
         <View style={styles.recicle}>
           <ButtonRecicle title="Regresar" />
           <Text style={styles.recicle__text}>Total: {hatsRecicle.length}</Text>
-          <ButtonRecicle title="Recargar" />
+          <ButtonRecicle title="Recargar" onPress={() => onPressRefresh()} />
         </View>
         <View style={styles.divider} />
         {
@@ -47,6 +57,25 @@ export const Recicle = ({navigation}: Props) => {
                     Alert.alert(
                       'Recuperar sombrero',
                       '¿Estás seguro que deseas restaurar el sombrero?',
+                      [
+                        {
+                          text: 'No',
+                          onPress: () => console.log('cancelado'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Si',
+                          onPress: () => {
+                            if (network) {
+                              createHatService(item);
+                              deleteHatRecicleService(item._id);
+                              navigation.navigate('Hats');
+                            } else {
+                              Alert.alert('Usted no está conectado a internet');
+                            }
+                          },
+                        },
+                      ],
                     );
                   } catch (error) {
                     console.log(error);
