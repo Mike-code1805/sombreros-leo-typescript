@@ -6,20 +6,34 @@ import {registerValidation} from '../validator/registerValidation';
 import ButtonShared from '../shared/button/ButtonShared';
 import {User} from '../interfaces/interface';
 import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
+import {useDispatch, useSelector} from 'react-redux';
+import {register} from '../redux/apiCalls';
+import {PropsRedux} from '../interfaces/state';
 
 interface Props extends StackScreenProps<RootStackParams, 'Register'> {}
 
 export const Register = ({navigation}: Props) => {
+  const dispatch = useDispatch();
+  const userState = useSelector((state: PropsRedux) => state.user);
+
   const handleOnSubmitToRegister = async (values: User) => {
-    if (values.username === '') {
-      Alert.alert('Por favor escribe algo');
-    } else {
-      const objectToSent = {
-        username: values.username,
-        password: values.password,
-        passwordConfirmation: values.passwordConfirmation,
-      };
-      console.log(objectToSent);
+    try {
+      if (values.username === '') {
+        Alert.alert('Por favor escribe algo');
+      } else {
+        const objectToSent = {
+          username: values.username,
+          password: values.password,
+          passwordConfirmation: values.passwordConfirmation,
+        };
+        await register(dispatch, objectToSent);
+        console.log(userState);
+        if (!userState.error) {
+          navigation.navigate('Login');
+        }
+      }
+    } catch (error) {
+      console.log('Error Register');
     }
   };
 

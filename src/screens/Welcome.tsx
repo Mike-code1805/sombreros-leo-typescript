@@ -22,7 +22,7 @@ export const Welcome = ({navigation}: Props) => {
     (state: PropsRedux) => state.user.currentUser,
   );
   const dispatch = useDispatch();
-  console.log(stateUserAuth);
+
   const getPosterColors = async () => {
     const uri = require('../shared/desing/hat.png');
     const [primary = 'green', secondary = 'orange'] = await getImageColors(uri);

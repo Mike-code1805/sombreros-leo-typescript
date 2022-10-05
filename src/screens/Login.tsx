@@ -16,25 +16,22 @@ interface Props extends StackScreenProps<RootStackParams, 'Login'> {}
 
 export const Login = ({navigation}: Props) => {
   const stateUser = useSelector((state: PropsRedux) => state.user);
-  const [userState, setUserState] = useState(true);
   const dispatch = useDispatch();
-  console.log(stateUser);
+
   const handleOnSubmitToLogin = async (user: User) => {
     try {
-      await login(dispatch, user);
-      setUserState(stateUser.error);
-      if (!userState) {
-        setUserState(stateUser.error);
+      const objectToSent = {
+        username: user.username,
+        password: user.password,
+      };
+      await login(dispatch, objectToSent);
+      if (!stateUser.error) {
         navigation.dispatch(StackActions.replace('Welcome'));
       } else {
-        const objectToSent = {
-          username: user.username,
-          password: user.password,
-        };
-        console.log(objectToSent);
+        console.log('Error');
       }
     } catch (error) {
-      console.log(error);
+      console.log('Error Login');
     }
   };
 

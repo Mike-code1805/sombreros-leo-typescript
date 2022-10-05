@@ -24,7 +24,11 @@ export const Profile = ({navigation}: Props) => {
       <View style={styles.profile}>
         <View style={styles.profile__container}>
           <Text style={styles.profile__text}>
-            Hola NAME USER este será tu perfil que muy pronto irá mejorando...
+            Hola{' '}
+            {stateUser === null
+              ? 'NAME'
+              : stateUser.token.username}
+            este será tu perfil que muy pronto irá mejorando...
           </Text>
           <ButtonShared
             title="Cerrar Sesión"

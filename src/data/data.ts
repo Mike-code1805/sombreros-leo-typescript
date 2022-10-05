@@ -219,24 +219,3 @@ export const data = [
     pendiente: false,
   },
 ];
-
-// const tokenUser = async (key) => {
-//   try {
-//     const data = await AsyncStorage.getItem(key);
-//     if (data !== null) {
-//       return data;
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const token = tokenUser("token")
-//   .then((res) => {
-//     return res;
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-
-// export const TOKEN = token._W;

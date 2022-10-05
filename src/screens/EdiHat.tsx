@@ -131,13 +131,13 @@ export const EdiHat = ({navigation, route}: Props) => {
         <Field
           component={AppFormField}
           name="address"
-          placeholder={`${route.params.color_tape}`}
+          placeholder={`${route.params.address}`}
         />
         <Text style={styles.addHat__text}>Observaciones: </Text>
         <Field
           component={AppFormField}
           name="observations"
-          placeholder={`${route.params.color_tape}`}
+          placeholder={`${route.params.observations}`}
         />
         <View style={styles.addHat__container}>
           <Text style={styles.addHat__text}>Estado Pago: </Text>
@@ -150,7 +150,7 @@ export const EdiHat = ({navigation, route}: Props) => {
         <Field
           component={AppFormField}
           name="state_payment"
-          placeholder={`${route.params.color_tape}`}
+          placeholder={`${route.params.state_payment}`}
         />
         <AppFormSubmitButton title="Editar" />
       </AppForm>

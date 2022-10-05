@@ -39,7 +39,6 @@ export const Hats = ({navigation}: Props) => {
   };
 
   const onPressDelete = (item: HatProps) => {
-    console.log('delete');
     try {
       Alert.alert(
         'Borrar sombrero',
@@ -54,12 +53,10 @@ export const Hats = ({navigation}: Props) => {
             text: 'Si',
             onPress: () => {
               if (network) {
-                console.log(network);
                 createHatRecicleService(item);
                 deleteHatService(item._id!);
                 getHats(dispatch);
               } else {
-                console.log(network);
                 Alert.alert('Usted no está conectado a internet');
               }
             },

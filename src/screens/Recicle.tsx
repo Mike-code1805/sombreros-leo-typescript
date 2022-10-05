@@ -12,6 +12,9 @@ import createHatService from '../services/createHatService';
 import deleteHatRecicleService from '../services/hatRecicle/deleteHatRecicleService';
 import {getHatsRecicle} from '../redux/apiCalls';
 import {useNetInfo} from '../hooks/useNetInfo';
+import createHatDeletedPermanently from '../services/createHatDeletedPermanently/createHatDeletedPermanently';
+import {HatProps} from '../interfaces/interface';
+import {useEffect} from 'react';
 
 interface Props extends StackScreenProps<RootStackParams, 'Recicle'> {}
 
@@ -25,6 +28,32 @@ export const Recicle = ({navigation}: Props) => {
   const onPressRefresh = () => {
     getHatsRecicle(dispatch);
     console.log(hatsRecicle);
+  };
+
+  const onPressDelete = (item: HatProps) => {
+    try {
+      Alert.alert(
+        'Borrar sombrero permanentemente',
+        '¿Estás seguro que deseas eliminar el sombrero permanentemente?',
+        [
+          {
+            text: 'No',
+            onPress: () => console.log('cancelado'),
+            style: 'cancel',
+          },
+          {
+            text: 'Si',
+            onPress: async () => {
+              createHatDeletedPermanently(item);
+              deleteHatRecicleService(item._id!);
+              getHatsRecicle(dispatch);
+            },
+          },
+        ],
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <View style={styles.r}>
@@ -81,7 +110,7 @@ export const Recicle = ({navigation}: Props) => {
                     console.log(error);
                   }
                 }}
-                onPressDelete={() => console.log('delete')}
+                onPressDelete={() => onPressDelete(item)}
               />
             )}
             keyExtractor={item => item._id!.toString()}

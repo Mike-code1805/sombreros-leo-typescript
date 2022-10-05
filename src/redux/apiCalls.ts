@@ -40,7 +40,6 @@ export const register = async (dispatch: Dispatch<AnyAction>, user: User) => {
 export const getHats = async (dispatch: Dispatch<AnyAction>) => {
   dispatch(getHatStart());
   try {
-    console.log('dispatch(getHatSuccess(res.data)) 1');
     const res = await userRequest.get('/api/hat');
     dispatch(getHatSuccess(res.data));
   } catch (err) {

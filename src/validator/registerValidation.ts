@@ -11,6 +11,6 @@ export const registerValidation = yup.object({
     .min(6, 'La contraseña debe tener al menos 6 caracteres'),
   passwordConfirmation: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir')
     .required(),
 });

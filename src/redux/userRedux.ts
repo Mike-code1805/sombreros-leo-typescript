@@ -25,6 +25,7 @@ const userSlice = createSlice({
     },
     singupSuccess: (state, action) => {
       state.isFetching = false;
+      state.error = false;
     },
     singupFailure: (state) => {
       state.isFetching = false;
