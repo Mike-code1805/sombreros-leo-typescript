@@ -32,3 +32,16 @@ export interface User {
   password: string;
   passwordConfirmation?: string;
 }
+
+export interface RegisterUserProps {
+  username: string;
+  isAdmin: boolean;
+  email: null;
+  password: string;
+  valid: boolean;
+  _id: string;
+  created_at: string;
+  updated_at: string;
+  __v: number;
+  id: string;
+}

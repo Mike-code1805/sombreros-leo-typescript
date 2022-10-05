@@ -24,7 +24,6 @@ export const Login = ({navigation}: Props) => {
         password: user.password,
       };
       await login(dispatch, objectToSent);
-      console.log(stateUser);
       if (!stateUser.error) {
         navigation.dispatch(StackActions.replace('Welcome'));
       } else {

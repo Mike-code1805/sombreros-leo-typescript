@@ -9,12 +9,14 @@ import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 import {useDispatch, useSelector} from 'react-redux';
 import {login, register} from '../redux/apiCalls';
 import {PropsRedux} from '../interfaces/state';
+import {useState} from 'react';
 
 interface Props extends StackScreenProps<RootStackParams, 'Register'> {}
 
 export const Register = ({navigation}: Props) => {
   const dispatch = useDispatch();
   const userState = useSelector((state: PropsRedux) => state.user);
+  const [stateUser, setStateUser] = useState(true);
 
   const handleOnSubmitToRegister = async (values: User) => {
     try {
@@ -27,13 +29,20 @@ export const Register = ({navigation}: Props) => {
           passwordConfirmation: values.passwordConfirmation,
         };
         await register(dispatch, objectToSent);
-        console.log(userState);
-        if (userState.error || userState.currentUser === null) {
+        setStateUser(userState.error);
+        if (stateUser) {
           Alert.alert(
-            'ERROR: Usuario no Registrado D: pruebe usar otro Nombre de Usuario',
+            'ERROR: Usuario no Registrado D: pruebe probar con otro Nombre de Usuario',
           );
         } else {
-          await login(dispatch, objectToSent);
+          Alert.alert('ÉXITO', 'El usuario se ha creado exitósamente', [
+            {
+              text: 'Ok',
+              onPress: () => {
+                navigation.navigate('Login');
+              },
+            },
+          ]);
         }
       }
     } catch (error) {
@@ -54,7 +63,7 @@ export const Register = ({navigation}: Props) => {
           passwordConfirmation: '',
         }}
         validationSchema={registerValidation}
-        onSubmit={handleOnSubmitToRegister}>
+        onSubmit={(e: any) => handleOnSubmitToRegister(e)}>
         <Field component={AppFormField} name="username" placeholder="Nombre" />
         <Field
           component={AppFormField}
