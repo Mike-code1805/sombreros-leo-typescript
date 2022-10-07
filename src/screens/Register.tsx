@@ -11,12 +11,12 @@ import {login, register} from '../redux/apiCalls';
 import {PropsRedux} from '../interfaces/state';
 import {useEffect, useState} from 'react';
 import {logout} from '../redux/userRedux';
+import {StackActions} from '@react-navigation/native';
 
 interface Props extends StackScreenProps<RootStackParams, 'Register'> {}
 
 export const Register = ({navigation}: Props) => {
   const dispatch = useDispatch();
-  const [stateUser, setStateUser] = useState(true);
   const userState = useSelector((state: PropsRedux) => state.user);
 
   const handleOnSubmitToRegister = async (values: User) => {
@@ -29,15 +29,12 @@ export const Register = ({navigation}: Props) => {
           password: values.password,
           passwordConfirmation: values.passwordConfirmation,
         };
-        setTimeout(async () => {
-          await register(dispatch, objectToSent);
-          setStateUser(userState.error);
-          if (stateUser) {
-            Alert.alert(
-              'ERROR: Usuario no Registrado D: pruebe probar con otro Nombre de Usuario',
-            );
-          } else {
-            Alert.alert('ÉXITO', 'El usuario se ha creado exitósamente', [
+        await register(dispatch, objectToSent);
+        if (userState.error) {
+          Alert.alert(
+            'ERROR:',
+            'Usuario no Registrado D: pruebe probar con otro Nombre de Usuario',
+            [
               {
                 text: 'Ok',
                 onPress: () => {
@@ -45,9 +42,11 @@ export const Register = ({navigation}: Props) => {
                   console.log(userState);
                 },
               },
-            ]);
-          }
-        }, 1000);
+            ],
+          );
+        } else {
+          navigation.dispatch(StackActions.replace('Welcome'));
+        }
       }
     } catch (error) {
       Alert.alert('ERROR: Usuario no Registrado D:');
