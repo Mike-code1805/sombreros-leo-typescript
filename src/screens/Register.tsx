@@ -9,14 +9,15 @@ import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 import {useDispatch, useSelector} from 'react-redux';
 import {login, register} from '../redux/apiCalls';
 import {PropsRedux} from '../interfaces/state';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {logout} from '../redux/userRedux';
 
 interface Props extends StackScreenProps<RootStackParams, 'Register'> {}
 
 export const Register = ({navigation}: Props) => {
   const dispatch = useDispatch();
-  const userState = useSelector((state: PropsRedux) => state.user);
   const [stateUser, setStateUser] = useState(true);
+  const userState = useSelector((state: PropsRedux) => state.user);
 
   const handleOnSubmitToRegister = async (values: User) => {
     try {
@@ -28,22 +29,25 @@ export const Register = ({navigation}: Props) => {
           password: values.password,
           passwordConfirmation: values.passwordConfirmation,
         };
-        await register(dispatch, objectToSent);
-        setStateUser(userState.error);
-        if (stateUser) {
-          Alert.alert(
-            'ERROR: Usuario no Registrado D: pruebe probar con otro Nombre de Usuario',
-          );
-        } else {
-          Alert.alert('ÉXITO', 'El usuario se ha creado exitósamente', [
-            {
-              text: 'Ok',
-              onPress: () => {
-                navigation.navigate('Login');
+        setTimeout(async () => {
+          await register(dispatch, objectToSent);
+          setStateUser(userState.error);
+          if (stateUser) {
+            Alert.alert(
+              'ERROR: Usuario no Registrado D: pruebe probar con otro Nombre de Usuario',
+            );
+          } else {
+            Alert.alert('ÉXITO', 'El usuario se ha creado exitósamente', [
+              {
+                text: 'Ok',
+                onPress: () => {
+                  // navigation.navigate('Login');
+                  console.log(userState);
+                },
               },
-            },
-          ]);
-        }
+            ]);
+          }
+        }, 1000);
       }
     } catch (error) {
       Alert.alert('ERROR: Usuario no Registrado D:');
@@ -51,8 +55,14 @@ export const Register = ({navigation}: Props) => {
   };
 
   const handleOnGoLogin = () => {
-    navigation.navigate('Login');
+    // navigation.navigate('Login');
+    console.log(userState);
   };
+
+  const handleOnGoLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Registrarse:</Text>
@@ -84,6 +94,12 @@ export const Register = ({navigation}: Props) => {
       <ButtonShared
         title="Volver"
         onPress={handleOnGoLogin}
+        isValid={true}
+        color={'brown'}
+      />
+      <ButtonShared
+        title="Salir"
+        onPress={handleOnGoLogout}
         isValid={true}
         color={'brown'}
       />
