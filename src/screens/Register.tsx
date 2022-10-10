@@ -30,22 +30,13 @@ export const Register = ({navigation}: Props) => {
           passwordConfirmation: values.passwordConfirmation,
         };
         await register(dispatch, objectToSent);
-        if (userState.error) {
+        if (!userState.error) {
+          navigation.dispatch(StackActions.replace('Welcome'));
+        } else if (userState.error) {
           Alert.alert(
             'ERROR:',
             'Usuario no Registrado D: pruebe probar con otro Nombre de Usuario',
-            [
-              {
-                text: 'Ok',
-                onPress: () => {
-                  // navigation.navigate('Login');
-                  console.log(userState);
-                },
-              },
-            ],
           );
-        } else {
-          navigation.dispatch(StackActions.replace('Welcome'));
         }
       }
     } catch (error) {

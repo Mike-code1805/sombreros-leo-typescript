@@ -26,11 +26,11 @@ export const Login = ({navigation}: Props) => {
       await login(dispatch, objectToSent);
       if (!stateUser.error) {
         navigation.dispatch(StackActions.replace('Welcome'));
-      } else {
+      } else if (stateUser.error) {
         Alert.alert('Nombre de Usuario o Contraseña Incorrectas');
       }
     } catch (error) {
-      Alert.alert('Nombre de Usuario o Contraseña Incorrectas');
+      Alert.alert('Algo ha salido mal');
     }
   };
 

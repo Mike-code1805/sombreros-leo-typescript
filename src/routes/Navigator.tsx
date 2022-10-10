@@ -4,6 +4,7 @@ import {
   DetailsHat,
   EdiHat,
   Hats,
+  Loading,
   Login,
   Profile,
   Recicle,
@@ -31,7 +32,10 @@ export type RootStackParams = {
 const Stack = createStackNavigator<RootStackParams>();
 
 export const Navigator = () => {
-  const stateUser = useSelector((state: PropsRedux) => state.user.currentUser);
+  const stateUser = useSelector((state: PropsRedux) => state.user);
+
+  if ( stateUser.isFetching ) return <Loading />
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -44,7 +48,7 @@ export const Navigator = () => {
           fontWeight: 'bold',
         },
       }}>
-      {stateUser == null ? (
+      {stateUser.currentUser == null ? (
         <>
           <Stack.Screen
             name="Login"
