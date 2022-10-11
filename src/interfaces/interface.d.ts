@@ -18,6 +18,11 @@ export interface HatProps {
 }
 
 export interface LoginUser {
+  data: Tok;
+  status: number;
+}
+
+interface Tok {
   token: Token;
 }
 

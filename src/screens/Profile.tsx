@@ -27,7 +27,7 @@ export const Profile = ({navigation}: Props) => {
             Hola{' '}
             {stateUser === null
               ? 'NAME'
-              : stateUser.token.username}
+              : stateUser.data.token.username}
             este será tu perfil que muy pronto irá mejorando...
           </Text>
           <ButtonShared

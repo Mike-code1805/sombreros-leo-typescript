@@ -83,7 +83,7 @@ export const Hats = ({navigation}: Props) => {
               <Text
                 style={styles.header__text}
                 onPress={() => navigation.navigate('Profile')}>
-                Hola {user.token.username}!
+                Hola {user.data.token.username}!
               </Text>
               <View style={styles.header__icons}>
                 <ButtonsOpacity

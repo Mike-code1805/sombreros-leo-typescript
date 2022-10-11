@@ -20,7 +20,7 @@ export const login = async (dispatch: Dispatch<AnyAction>, user: User) => {
   dispatch(loginStart());
   try {
     const res = await publicRequest.post('/api/auth/login', user);
-    dispatch(loginSuccess(res.data));
+    dispatch(loginSuccess(res));
   } catch (err: any) {
     dispatch(loginFailure());
     console.log(err);
@@ -31,7 +31,7 @@ export const register = async (dispatch: Dispatch<AnyAction>, user: User) => {
   dispatch(singupStart());
   try {
     const res = await publicRequest.post('/api/auth/register', user);
-    dispatch(singupSuccess(res.data));
+    dispatch(singupSuccess(res));
   } catch (err) {
     dispatch(singupFailure());
   }

@@ -1,3 +1,4 @@
+import {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
   AddHat,
@@ -13,9 +14,8 @@ import {
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {Welcome} from '../screens/Welcome';
-import {useSelector} from 'react-redux';
-import {PropsRedux} from '../interfaces/state';
 import {HatProps} from '../interfaces/interface';
+import {AuthContext} from '../context/AuthContext';
 
 export type RootStackParams = {
   Hats: undefined;
@@ -32,9 +32,9 @@ export type RootStackParams = {
 const Stack = createStackNavigator<RootStackParams>();
 
 export const Navigator = () => {
-  const stateUser = useSelector((state: PropsRedux) => state.user);
+  const {status} = useContext(AuthContext);
 
-  if ( stateUser.isFetching ) return <Loading />
+  // if (status === 'checking') return <Loading />;
 
   return (
     <Stack.Navigator
@@ -48,7 +48,7 @@ export const Navigator = () => {
           fontWeight: 'bold',
         },
       }}>
-      {stateUser.currentUser == null ? (
+      {status !== 'authenticated' ? (
         <>
           <Stack.Screen
             name="Login"

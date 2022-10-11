@@ -31,7 +31,7 @@ export const Welcome = ({navigation}: Props) => {
   };
 
   const sendTokenUser = async () => {
-    await AsyncStorage.setItem('token', stateUserAuth.token.authToken);
+    await AsyncStorage.setItem('token', stateUserAuth.data.token.authToken);
   };
 
   useEffect(() => {

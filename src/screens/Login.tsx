@@ -1,5 +1,6 @@
+import {useContext, useEffect} from 'react';
 import {Field} from 'formik';
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View, Keyboard} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
@@ -10,28 +11,27 @@ import {useSelector, useDispatch} from 'react-redux';
 import {PropsRedux} from '../interfaces/state';
 import {login} from '../redux/apiCalls';
 import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
+import {publicRequest} from '../api/requestMethods';
+import {AuthContext} from '../context/AuthContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'Login'> {}
 
 export const Login = ({navigation}: Props) => {
-  const stateUser = useSelector((state: PropsRedux) => state.user);
-  const dispatch = useDispatch();
+  const {signIn, errorMessage, removeError} = useContext(AuthContext);
 
-  const handleOnSubmitToLogin = async (user: User) => {
-    try {
-      const objectToSent = {
-        username: user.username,
-        password: user.password,
-      };
-      await login(dispatch, objectToSent);
-      if (!stateUser.error) {
-        navigation.dispatch(StackActions.replace('Welcome'));
-      } else if (stateUser.error) {
-        Alert.alert('Nombre de Usuario o Contraseña Incorrectas');
-      }
-    } catch (error) {
-      Alert.alert('Algo ha salido mal');
-    }
+  useEffect(() => {
+    if (errorMessage.length === 0) return;
+    Alert.alert('Login incorrecto', errorMessage, [
+      {
+        text: 'Ok',
+        onPress: removeError,
+      },
+    ]);
+  }, [errorMessage]);
+
+  const onLogin = ({username, password}: User) => {
+    Keyboard.dismiss();
+    signIn({username, password});
   };
 
   const handleOnGoSubmit = () => {
@@ -47,7 +47,7 @@ export const Login = ({navigation}: Props) => {
           password: '',
         }}
         validationSchema={loginValidation}
-        onSubmit={handleOnSubmitToLogin}>
+        onSubmit={onLogin}>
         <Field component={AppFormField} name="username" placeholder="Nombre" />
         <Field
           component={AppFormField}
