@@ -11,6 +11,7 @@ import {AuthProvider} from './src/context/AuthContext';
 const AppState = ({children}: any) => {
   return <AuthProvider>{children}</AuthProvider>;
 };
+
 const App = () => {
   return (
     <Provider store={store}>

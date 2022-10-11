@@ -14,6 +14,7 @@ import {PropsRedux} from '../interfaces/state';
 import {useDispatch, useSelector} from 'react-redux';
 import {getHats, getHatsRecicle} from '../redux/apiCalls';
 import {logout} from '../redux/userRedux';
+import { AuthContext } from '../context/AuthContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'Welcome'> {}
 
@@ -23,6 +24,7 @@ export const Welcome = ({navigation}: Props) => {
     (state: PropsRedux) => state.user.currentUser,
   );
   const dispatch = useDispatch();
+  const {logOut} = useContext(AuthContext);
 
   const getPosterColors = async () => {
     const uri = require('../shared/desing/hat.png');
@@ -36,14 +38,13 @@ export const Welcome = ({navigation}: Props) => {
 
   useEffect(() => {
     getPosterColors();
-    sendTokenUser();
     getHats(dispatch);
     getHatsRecicle(dispatch);
   }, []);
 
   const handleOnGoSubmitGo = () => {
     // console.log(stateUserAuth);
-    dispatch(logout());
+    logOut();
     // navigation.dispatch(StackActions.replace('Hats'));
   };
 

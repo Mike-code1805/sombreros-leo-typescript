@@ -1,17 +1,12 @@
 import {useContext, useEffect} from 'react';
 import {Field} from 'formik';
 import {Alert, StyleSheet, Text, View, Keyboard} from 'react-native';
-import {StackActions} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
 import {loginValidation} from '../validator/loginValidation';
 import ButtonShared from '../shared/button/ButtonShared';
 import {User} from '../interfaces/interface';
-import {useSelector, useDispatch} from 'react-redux';
-import {PropsRedux} from '../interfaces/state';
-import {login} from '../redux/apiCalls';
 import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
-import {publicRequest} from '../api/requestMethods';
 import {AuthContext} from '../context/AuthContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'Login'> {}

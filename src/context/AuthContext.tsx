@@ -26,6 +26,32 @@ export const AuthContext = createContext({} as AuthContextProps);
 export const AuthProvider = ({children}: any) => {
   const [state, dispatch] = useReducer(authReducer, authInicialState);
 
+  useEffect(() => {
+    checkToken();
+    console.log(state.token);
+  }, []);
+
+  const checkToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    // No token, no autenticado
+    if (!token) return dispatch({type: 'notAuthenticated'});
+
+    // Hay token
+    const resp = await userRequest.get('/api/auth/validation');
+    if (resp.status !== 200) {
+      return dispatch({type: 'notAuthenticated'});
+    }
+
+    await AsyncStorage.setItem('token', resp.data.token.authToken);
+    dispatch({
+      type: 'signUp',
+      payload: {
+        token: resp.data.token,
+      },
+    });
+  };
+
   const signUp = async ({
     username,
     password,
@@ -68,6 +94,7 @@ export const AuthProvider = ({children}: any) => {
         },
       });
       await AsyncStorage.setItem('token', data.token.authToken);
+      console.log(data);
     } catch (error: any) {
       dispatch({
         type: 'addError',
@@ -75,8 +102,12 @@ export const AuthProvider = ({children}: any) => {
       });
     }
   };
-  const logOut = () => {};
-  
+
+  const logOut = async () => {
+    await AsyncStorage.removeItem('token');
+    dispatch({type: 'logout'});
+  };
+
   const removeError = () => {
     dispatch({type: 'removeError'});
   };

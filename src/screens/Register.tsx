@@ -1,52 +1,50 @@
+import {useContext, useEffect} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {Field} from 'formik';
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, Keyboard, StyleSheet, Text, View} from 'react-native';
 import {RootStackParams} from '../routes/Navigator';
 import {registerValidation} from '../validator/registerValidation';
 import ButtonShared from '../shared/button/ButtonShared';
-import {User} from '../interfaces/interface';
 import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
 import {useDispatch, useSelector} from 'react-redux';
-import {login, register} from '../redux/apiCalls';
 import {PropsRedux} from '../interfaces/state';
-import {useEffect, useState} from 'react';
 import {logout} from '../redux/userRedux';
-import {StackActions} from '@react-navigation/native';
+import {AuthContext} from '../context/AuthContext';
+import {RegisterData} from '../interfaces/user';
 
 interface Props extends StackScreenProps<RootStackParams, 'Register'> {}
 
 export const Register = ({navigation}: Props) => {
   const dispatch = useDispatch();
   const userState = useSelector((state: PropsRedux) => state.user);
+  const {signUp, errorMessage, removeError} = useContext(AuthContext);
 
-  const handleOnSubmitToRegister = async (values: User) => {
-    try {
-      if (values.username === '') {
-        Alert.alert('Por favor escribe algo');
-      } else {
-        const objectToSent = {
-          username: values.username,
-          password: values.password,
-          passwordConfirmation: values.passwordConfirmation,
-        };
-        await register(dispatch, objectToSent);
-        if (!userState.error) {
-          navigation.dispatch(StackActions.replace('Welcome'));
-        } else if (userState.error) {
-          Alert.alert(
-            'ERROR:',
-            'Usuario no Registrado D: pruebe probar con otro Nombre de Usuario',
-          );
-        }
-      }
-    } catch (error) {
-      Alert.alert('ERROR: Usuario no Registrado D:');
-    }
+  useEffect(() => {
+    if (errorMessage.length === 0) return;
+
+    Alert.alert('Registro incorrecto', errorMessage, [
+      {
+        text: 'Ok',
+        onPress: removeError,
+      },
+    ]);
+  }, [errorMessage]);
+
+  const onRegister = ({
+    username,
+    password,
+    passwordConfirmation,
+  }: RegisterData) => {
+    Keyboard.dismiss();
+    signUp({
+      username,
+      password,
+      passwordConfirmation,
+    });
   };
 
   const handleOnGoLogin = () => {
-    // navigation.navigate('Login');
-    console.log(userState);
+    navigation.navigate('Login');
   };
 
   const handleOnGoLogout = () => {
@@ -63,7 +61,7 @@ export const Register = ({navigation}: Props) => {
           passwordConfirmation: '',
         }}
         validationSchema={registerValidation}
-        onSubmit={(e: any) => handleOnSubmitToRegister(e)}>
+        onSubmit={onRegister}>
         <Field component={AppFormField} name="username" placeholder="Nombre" />
         <Field
           component={AppFormField}

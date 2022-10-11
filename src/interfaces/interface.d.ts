@@ -28,7 +28,7 @@ interface Tok {
 
 export interface Token {
   authToken: string;
-  refreshToken: string;
+  refreshToken?: string;
   username: string;
 }
 
