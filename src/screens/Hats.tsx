@@ -22,16 +22,18 @@ import {CommonActions} from '@react-navigation/native';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
 import createHatRecicleService from '../services/hatRecicle/createHatRecicleService';
 import {HatProps} from '../interfaces/interface';
-import deleteHatService from '../services/deleteHatService';
+import {deleteHatService} from '../services/deleteHatService';
 import {useNetInfo} from '../hooks/useNetInfo';
 import {AuthContext} from '../context/AuthContext';
+import {HatsContext} from '../context/HatContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'Hats'> {}
 
 export const Hats = ({navigation}: Props) => {
   const dispatch = useDispatch();
-  const hats = useSelector((state: PropsRedux) => state.hat.hats);
+  // const hats = useSelector((state: PropsRedux) => state.hat.hats);
   const {token} = useContext(AuthContext);
+  const {hats} = useContext(HatsContext);
   const {network} = useNetInfo();
 
   const getHatsRefreshButton = () => {
@@ -122,7 +124,10 @@ export const Hats = ({navigation}: Props) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <ButtonsOpacity name="search-outline" />
+              <ButtonsOpacity
+                name="search-outline"
+                onPress={() => console.log(hats)}
+              />
               <ButtonsOpacity
                 name="refresh-outline"
                 onPress={() => getHatsRefreshButton()}
@@ -164,7 +169,7 @@ export const Hats = ({navigation}: Props) => {
                     onPressDelete={() => onPressDelete(item)}
                   />
                 )}
-                keyExtractor={item => item._id!.toString()}
+                keyExtractor={item => item._id!}
                 horizontal={false}
               />
             )}

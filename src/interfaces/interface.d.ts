@@ -15,6 +15,7 @@ export interface HatProps {
   state_payment: string;
   tafalete: string;
   pendiente: boolean;
+  __v?: number;
 }
 
 export interface LoginUser {

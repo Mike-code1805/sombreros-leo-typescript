@@ -1,5 +1,5 @@
+import {useContext} from 'react';
 import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
-
 import {Field} from 'formik';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
@@ -10,14 +10,14 @@ import {HatProps} from '../interfaces/interface';
 import ButtonShared from '../shared/button/ButtonShared';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../routes/Navigator';
-import {useDispatch} from 'react-redux';
-import createHatService from '../services/createHatService';
+import {createHatService} from '../services/createHatService';
 import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
+import {HatsContext} from '../context/HatContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'AddHat'> {}
 
 export const AddHat = ({navigation}: Props) => {
-  const dispatch = useDispatch();
+  const {addHat} = useContext(HatsContext);
 
   const handleOnSubmitToAdd = (values: HatProps) => {
     if (values.name === '') {
@@ -40,7 +40,7 @@ export const AddHat = ({navigation}: Props) => {
         date: format(new Date(), 'yyyy-MM-dd, H:mma'),
         pendiente: true,
       };
-      createHatService(objectToSent);
+      addHat(objectToSent);
       navigation.navigate('Hats');
     }
   };
@@ -105,7 +105,9 @@ export const AddHat = ({navigation}: Props) => {
         />
         <Text style={styles.addHat__text}>Tamaño: </Text>
         <Field component={AppFormField} name="size" placeholder="Tamaño" />
-        <Text style={styles.addHat__text}>Estado (1°) (2°) (3°) (4°) (5°): </Text>
+        <Text style={styles.addHat__text}>
+          Estado (1°) (2°) (3°) (4°) (5°):{' '}
+        </Text>
         <Field component={AppFormField} name="state" placeholder="Estado" />
         <Text style={styles.addHat__text}>Precio (S/.): </Text>
         <Field component={AppFormField} name="price" placeholder="Precio" />

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -13,15 +13,28 @@ import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonActions} from '@react-navigation/native';
+import {HatsContext} from '../context/HatContext';
+import {HatProps} from '../interfaces/interface';
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailsHat'> {}
 
 export const DetailsHat = ({navigation, route}: Props) => {
-  const [isDone, setIsDone] = useState(false);
+  const {loadHatById, hat} = useContext(HatsContext);
+  // const [hat, sethat] = useState<HatProps>();
+
+  useEffect(() => {
+    getDetailsHat();
+  }, [route.params]);
+
+  const getDetailsHat = async () => {
+    await loadHatById(route.params._id!);
+  };
 
   const onPressState_Payment = async () => {
     try {
-      console.log(route.params);
+      console.log(hat!);
+      // console.log(route.params);
+      // console.log('data->', data);
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +42,6 @@ export const DetailsHat = ({navigation, route}: Props) => {
 
   const onPressDone = async () => {
     try {
-      setIsDone(true);
     } catch (error) {
       console.log(error);
     }
@@ -45,74 +57,64 @@ export const DetailsHat = ({navigation, route}: Props) => {
         <View style={styles.detailsHat}>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Nombre: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.name}</Text>
+            <Text style={styles.detailsHat__text}>{hat!.name}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Fecha: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.date}</Text>
+            <Text style={styles.detailsHat__text}>{hat!.date}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Color de Sombrero: </Text>
-            <Text style={styles.detailsHat__text}>
-              {route.params.color_hat}
-            </Text>
+            <Text style={styles.detailsHat__text}>{hat!.color_hat}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Cintillo: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.cintillo}</Text>
+            <Text style={styles.detailsHat__text}>{hat!.cintillo}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Tafalete: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.tafalete}</Text>
+            <Text style={styles.detailsHat__text}>{hat!.tafalete}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Medida: </Text>
-            <Text style={styles.detailsHat__text}>
-              {route.params.measure}cm
-            </Text>
+            <Text style={styles.detailsHat__text}>{hat!.measure}cm</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Color de Cinta: </Text>
-            <Text style={styles.detailsHat__text}>
-              {route.params.color_tape}
-            </Text>
+            <Text style={styles.detailsHat__text}>{hat!.color_tape}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Tamaño: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.size}</Text>
+            <Text style={styles.detailsHat__text}>{hat!.size}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Estado: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.state}°</Text>
+            <Text style={styles.detailsHat__text}>{hat!.state}°</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Precio: </Text>
-            <Text style={styles.detailsHat__text}>S/.{route.params.price}</Text>
+            <Text style={styles.detailsHat__text}>S/.{hat!.price}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Adelanto: </Text>
-            <Text style={styles.detailsHat__text}>
-              S/.{route.params.advancement}
-            </Text>
+            <Text style={styles.detailsHat__text}>S/.{hat!.advancement}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Domicilio: </Text>
-            <Text style={styles.detailsHat__text}>{route.params.address}</Text>
+            <Text style={styles.detailsHat__text}>{hat!.address}</Text>
           </View>
           <View style={styles.detailsHat__container}>
             <Text style={styles.detailsHat__textData}>Observaciones: </Text>
-            <Text style={styles.detailsHat__text}>
-              {route.params.observations}
-            </Text>
+            <Text style={styles.detailsHat__text}>{hat!.observations}</Text>
           </View>
-          {route.params.state_payment === 'p' ? (
+          {hat!.state_payment === 'p' ? (
             <View style={styles.detailsHat__container}>
               <Text style={styles.detailsHat__textData__worked}>
                 Pendiente De Trabajarlo
               </Text>
             </View>
           ) : null}
-          {route.params.state_payment === 'c' ? (
+          {hat!.state_payment === 'c' ? (
             <View style={styles.detailsHat__container}>
               <Text style={styles.detailsHat__textData}>
                 Sombrero Pagado y Entregado
@@ -139,7 +141,7 @@ export const DetailsHat = ({navigation, route}: Props) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.prdetailsButtons__pay}
-          disabled={route.params.pendiente ? false : true}
+          disabled={hat!.pendiente ? false : true}
           onPress={onPressState_Payment}>
           <Icon name="thumbs-up" color="white" size={23} />
           <Text style={styles.detailsButtons__style__text}>Entregado</Text>
@@ -147,8 +149,7 @@ export const DetailsHat = ({navigation, route}: Props) => {
         <TouchableOpacity
           style={styles.prdetailsButtons__work}
           disabled={
-            route.params.state_payment === 't' ||
-            route.params.state_payment === 'c'
+            hat!.state_payment === 't' || hat!.state_payment === 'c'
               ? true
               : false
           }

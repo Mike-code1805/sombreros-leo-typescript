@@ -8,16 +8,15 @@ import {hatValidaton} from '../validator/hatValidaton';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {equalsObsjects} from '../functions/equalsObsjects';
-import editHatService from '../services/editHatService';
-import {getHats} from '../redux/apiCalls';
-import {useDispatch} from 'react-redux';
 import {CommonActions} from '@react-navigation/native';
 import {AppForm, AppFormField, AppFormSubmitButton} from '../components/form';
+import {useContext} from 'react';
+import {HatsContext} from '../context/HatContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'EdiHat'> {}
 
 export const EdiHat = ({navigation, route}: Props) => {
-  const dispatch = useDispatch();
+  const {updateHat} = useContext(HatsContext);
 
   const handleOnSubmitToEdit = async (values: HatProps) => {
     if (equalsObsjects(values, route.params)) {
@@ -40,8 +39,8 @@ export const EdiHat = ({navigation, route}: Props) => {
         date: route.params.date,
         pendiente: true,
       };
-      await editHatService(route.params._id!, objectToSent);
-      getHats(dispatch);
+      updateHat(route.params._id!, objectToSent);
+      
       navigation.dispatch(CommonActions.navigate('DetailsHat', objectToSent));
     }
   };
@@ -109,7 +108,9 @@ export const EdiHat = ({navigation, route}: Props) => {
           name="size"
           placeholder={`${route.params.size}`}
         />
-        <Text style={styles.addHat__text}>Estado (1°) (2°) (3°) (4°) (5°): </Text>
+        <Text style={styles.addHat__text}>
+          Estado (1°) (2°) (3°) (4°) (5°):{' '}
+        </Text>
         <Field
           component={AppFormField}
           name="state"

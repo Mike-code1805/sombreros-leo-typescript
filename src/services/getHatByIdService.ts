@@ -1,12 +1,6 @@
 import userRequest from '../api/requestMethods';
 
-const getHatByIdService = async (id: string) => {
-  try {
-    const data = await userRequest.get(`/api/hat/${id}`);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+export const getHatByIdService = async (id: string) => {
+  const resp = await userRequest.get(`/api/hat/${id}`);
+  return resp.data.hat;
 };
-
-export default getHatByIdService;

@@ -7,9 +7,14 @@ import {Provider} from 'react-redux';
 import {persistor, store} from './src/redux/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {AuthProvider} from './src/context/AuthContext';
+import {HatsProvider} from './src/context/HatContext';
 
 const AppState = ({children}: any) => {
-  return <AuthProvider>{children}</AuthProvider>;
+  return (
+    <AuthProvider>
+      <HatsProvider>{children}</HatsProvider>
+    </AuthProvider>
+  );
 };
 
 const App = () => {
