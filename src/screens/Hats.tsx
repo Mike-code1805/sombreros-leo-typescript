@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -24,18 +24,18 @@ import createHatRecicleService from '../services/hatRecicle/createHatRecicleServ
 import {HatProps} from '../interfaces/interface';
 import deleteHatService from '../services/deleteHatService';
 import {useNetInfo} from '../hooks/useNetInfo';
+import {AuthContext} from '../context/AuthContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'Hats'> {}
 
 export const Hats = ({navigation}: Props) => {
   const dispatch = useDispatch();
   const hats = useSelector((state: PropsRedux) => state.hat.hats);
-  const user = useSelector((state: PropsRedux) => state.user.currentUser);
+  const {token} = useContext(AuthContext);
   const {network} = useNetInfo();
 
   const getHatsRefreshButton = () => {
     getHats(dispatch);
-    console.log(hats);
   };
 
   const onPressDelete = (item: HatProps) => {
@@ -68,8 +68,6 @@ export const Hats = ({navigation}: Props) => {
     }
   };
 
-  useEffect(() => {}, []);
-
   return (
     <View style={styles.noteCard}>
       {false ? (
@@ -83,7 +81,7 @@ export const Hats = ({navigation}: Props) => {
               <Text
                 style={styles.header__text}
                 onPress={() => navigation.navigate('Profile')}>
-                Hola {user.data.token.username}!
+                Hola {token?.username}!
               </Text>
               <View style={styles.header__icons}>
                 <ButtonsOpacity

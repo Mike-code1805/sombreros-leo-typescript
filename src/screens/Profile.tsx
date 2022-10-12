@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
@@ -9,30 +9,23 @@ import {GradientBackground} from '../components/gradient/GradientBackground';
 import {PropsRedux} from '../interfaces/state';
 import {logout} from '../redux/userRedux';
 import ButtonShared from '../shared/button/ButtonShared';
+import {AuthContext} from '../context/AuthContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'Profile'> {}
 
 export const Profile = ({navigation}: Props) => {
-  const dispatch = useDispatch();
-  const stateUser = useSelector((state: PropsRedux) => state.user.currentUser);
-
-  const handlePressLogout = () => {
-    dispatch(logout());
-  };
+  const {logOut, token} = useContext(AuthContext);
   return (
     <GradientBackground>
       <View style={styles.profile}>
         <View style={styles.profile__container}>
           <Text style={styles.profile__text}>
-            Hola{' '}
-            {stateUser === null
-              ? 'NAME'
-              : stateUser.data.token.username}
-            este será tu perfil que muy pronto irá mejorando...
+            Hola {token?.username} este será tu perfil que muy pronto irá
+            mejorando...
           </Text>
           <ButtonShared
             title="Cerrar Sesión"
-            onPress={handlePressLogout}
+            onPress={() => logOut()}
             isValid={true}
             color={'black'}
           />

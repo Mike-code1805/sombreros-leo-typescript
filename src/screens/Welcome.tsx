@@ -1,6 +1,5 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React, {useEffect, useContext} from 'react';
-import {StackActions} from '@react-navigation/native';
 import * as color from '../shared/theme/color';
 import * as font from '../shared/theme/font';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -14,7 +13,7 @@ import {PropsRedux} from '../interfaces/state';
 import {useDispatch, useSelector} from 'react-redux';
 import {getHats, getHatsRecicle} from '../redux/apiCalls';
 import {logout} from '../redux/userRedux';
-import { AuthContext } from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 
 interface Props extends StackScreenProps<RootStackParams, 'Welcome'> {}
 
@@ -23,8 +22,7 @@ export const Welcome = ({navigation}: Props) => {
   const stateUserAuth = useSelector(
     (state: PropsRedux) => state.user.currentUser,
   );
-  const dispatch = useDispatch();
-  const {logOut} = useContext(AuthContext);
+  const dispatch = useDispatch();  
 
   const getPosterColors = async () => {
     const uri = require('../shared/desing/hat.png');
@@ -32,21 +30,11 @@ export const Welcome = ({navigation}: Props) => {
     setMainColors({primary, secondary});
   };
 
-  const sendTokenUser = async () => {
-    await AsyncStorage.setItem('token', stateUserAuth.data.token.authToken);
-  };
-
   useEffect(() => {
     getPosterColors();
     getHats(dispatch);
     getHatsRecicle(dispatch);
   }, []);
-
-  const handleOnGoSubmitGo = () => {
-    // console.log(stateUserAuth);
-    logOut();
-    // navigation.dispatch(StackActions.replace('Hats'));
-  };
 
   return (
     <GradientBackground>
@@ -65,7 +53,7 @@ export const Welcome = ({navigation}: Props) => {
           </Text>
           <ButtonShared
             title="Ir a los Sombreros"
-            onPress={handleOnGoSubmitGo}
+            onPress={() => navigation.navigate('Hats')}
             isValid={true}
           />
         </View>
