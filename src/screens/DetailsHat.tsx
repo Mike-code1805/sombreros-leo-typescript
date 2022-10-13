@@ -15,11 +15,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonActions} from '@react-navigation/native';
 import {HatsContext} from '../context/HatContext';
 import {HatProps} from '../interfaces/interface';
+import {DetailHatContainer} from '../components/hats/DetailHatContainer';
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailsHat'> {}
 
 export const DetailsHat = ({navigation, route}: Props) => {
-  const {loadHatById, hat} = useContext(HatsContext); 
+  const {loadHatById, hat} = useContext(HatsContext);
 
   useEffect(() => {
     loadHatById(route.params._id!);
@@ -27,7 +28,7 @@ export const DetailsHat = ({navigation, route}: Props) => {
 
   const onPressState_Payment = async () => {
     try {
-      console.log(hat!);
+      console.log(hat);
       // console.log(route.params);
       // console.log('data->', data);
     } catch (error) {
@@ -54,66 +55,15 @@ export const DetailsHat = ({navigation, route}: Props) => {
         </View>
       ) : (
         <View style={styles.detailsHat}>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Nombre: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.name}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Fecha: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.date}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Color de Sombrero: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.color_hat}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Cintillo: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.cintillo}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Tafalete: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.tafalete}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Medida: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.measure}cm</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Color de Cinta: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.color_tape}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Tamaño: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.size}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Estado: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.state}°</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Precio: </Text>
-            <Text style={styles.detailsHat__text}>S/.{hat!.price}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Adelanto: </Text>
-            <Text style={styles.detailsHat__text}>S/.{hat!.advancement}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Domicilio: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.address}</Text>
-          </View>
-          <View style={styles.detailsHat__container}>
-            <Text style={styles.detailsHat__textData}>Observaciones: </Text>
-            <Text style={styles.detailsHat__text}>{hat!.observations}</Text>
-          </View>
-          {hat!.state_payment === 'p' ? (
+          <DetailHatContainer hat={hat} />          
+          {hat.state_payment === 'p' ? (
             <View style={styles.detailsHat__container}>
               <Text style={styles.detailsHat__textData__worked}>
                 Pendiente De Trabajarlo
               </Text>
             </View>
           ) : null}
-          {hat!.state_payment === 'c' ? (
+          {hat.state_payment === 'c' ? (
             <View style={styles.detailsHat__container}>
               <Text style={styles.detailsHat__textData}>
                 Sombrero Pagado y Entregado
@@ -140,7 +90,7 @@ export const DetailsHat = ({navigation, route}: Props) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.prdetailsButtons__pay}
-          disabled={hat!.pendiente ? false : true}
+          disabled={hat.pendiente ? false : true}
           onPress={onPressState_Payment}>
           <Icon name="thumbs-up" color="white" size={23} />
           <Text style={styles.detailsButtons__style__text}>Entregado</Text>
@@ -148,7 +98,7 @@ export const DetailsHat = ({navigation, route}: Props) => {
         <TouchableOpacity
           style={styles.prdetailsButtons__work}
           disabled={
-            hat!.state_payment === 't' || hat!.state_payment === 'c'
+            hat.state_payment === 't' || hat.state_payment === 'c'
               ? true
               : false
           }
@@ -157,10 +107,9 @@ export const DetailsHat = ({navigation, route}: Props) => {
           <Text style={styles.detailsButtons__style__text}>Trabajado</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.prdetailsButtons__pay}
-          disabled={hat!.pendiente ? false : true}
+          style={styles.prdetailsButtons__delete}
+          disabled={hat.pendiente ? false : true}
           onPress={goHats}>
-          <Icon name="thumbs-up" color="red" size={23} />
           <Text style={styles.detailsButtons__style__text}>Volver</Text>
         </TouchableOpacity>
       </View>

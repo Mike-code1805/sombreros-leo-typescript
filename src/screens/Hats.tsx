@@ -31,14 +31,9 @@ interface Props extends StackScreenProps<RootStackParams, 'Hats'> {}
 
 export const Hats = ({navigation}: Props) => {
   const dispatch = useDispatch();
-  // const hats = useSelector((state: PropsRedux) => state.hat.hats);
   const {token} = useContext(AuthContext);
-  const {hats} = useContext(HatsContext);
+  const {hats, loadHats} = useContext(HatsContext);
   const {network} = useNetInfo();
-
-  const getHatsRefreshButton = () => {
-    getHats(dispatch);
-  };
 
   const onPressDelete = (item: HatProps) => {
     try {
@@ -130,7 +125,7 @@ export const Hats = ({navigation}: Props) => {
               />
               <ButtonsOpacity
                 name="refresh-outline"
-                onPress={() => getHatsRefreshButton()}
+                onPress={() => loadHats()}
               />
             </View>
           </View>
