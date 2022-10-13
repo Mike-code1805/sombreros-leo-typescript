@@ -16,7 +16,7 @@ import {HatsContext} from '../context/HatContext';
 interface Props extends StackScreenProps<RootStackParams, 'EdiHat'> {}
 
 export const EdiHat = ({navigation, route}: Props) => {
-  const {updateHat} = useContext(HatsContext);
+  const {updateHat, hat} = useContext(HatsContext);
 
   const handleOnSubmitToEdit = async (values: HatProps) => {
     if (equalsObsjects(values, route.params)) {
@@ -40,73 +40,70 @@ export const EdiHat = ({navigation, route}: Props) => {
         pendiente: true,
       };
       updateHat(route.params._id!, objectToSent);
-      
-      navigation.dispatch(CommonActions.navigate('DetailsHat', objectToSent));
+      navigation.dispatch(
+        CommonActions.navigate('DetailsHat', {_id: route.params._id}),
+      );
     }
   };
   return (
     <ScrollView style={styles.addHat}>
       <AppForm
         initialValues={{
-          name: route.params.name,
-          color_hat: route.params.color_hat,
-          cintillo: route.params.cintillo,
-          tafalete: route.params.tafalete,
-          measure: route.params.measure,
-          color_tape: route.params.color_tape,
-          size: route.params.size,
-          state: route.params.state,
-          price: route.params.price,
-          advancement: route.params.advancement,
-          address: route.params.address,
-          observations: route.params.observations,
-          state_payment: route.params.state_payment,
-          pendiente: route.params.pendiente,
-          date: route.params.date,
+          name: hat.name,
+          color_hat: hat.color_hat,
+          cintillo: hat.cintillo,
+          tafalete: hat.tafalete,
+          measure: hat.measure,
+          color_tape: hat.color_tape,
+          size: hat.size,
+          state: hat.state,
+          price: hat.price,
+          advancement: hat.advancement,
+          address: hat.address,
+          observations: hat.observations,
+          state_payment: hat.state_payment,
+          pendiente: hat.pendiente,
+          date: hat.date,
         }}
         validationSchema={hatValidaton}
         onSubmit={handleOnSubmitToEdit}>
         <Text style={styles.addHat__text}>Nombre: </Text>
-        <Field
-          component={AppFormField}
-          name="name"
-          placeholder={route.params.name}
-        />
+        <Field component={AppFormField} name="name" placeholder={hat.name} />
         <Text style={styles.addHat__text}>Color de Sombrero: </Text>
         <Field
           component={AppFormField}
           name="color_hat"
-          placeholder={route.params.color_hat}
+          placeholder={hat.color_hat}
         />
         <Text style={styles.addHat__text}>Cintillo (si) (no): </Text>
         <Field
           component={AppFormField}
           name="cintillo"
-          placeholder={route.params.cintillo}
+          placeholder={hat.cintillo}
         />
         <Text style={styles.addHat__text}>Tafalete (si) (no): </Text>
         <Field
           component={AppFormField}
           name="tafalete"
-          placeholder={route.params.tafalete}
+          placeholder={hat.tafalete}
         />
         <Text style={styles.addHat__text}>Medida(cm): </Text>
         <Field
           component={AppFormField}
           name="measure"
-          placeholder={`${route.params.measure}cm`}
+          placeholder={`${hat.measure}cm`}
         />
         <Text style={styles.addHat__text}>Color de Cinta: </Text>
         <Field
           component={AppFormField}
           name="color_tape"
-          placeholder={`${route.params.color_tape}`}
+          placeholder={`${hat.color_tape}`}
         />
         <Text style={styles.addHat__text}>Tamaño: </Text>
         <Field
           component={AppFormField}
           name="size"
-          placeholder={`${route.params.size}`}
+          placeholder={`${hat.size}`}
         />
         <Text style={styles.addHat__text}>
           Estado (1°) (2°) (3°) (4°) (5°):{' '}
@@ -114,31 +111,31 @@ export const EdiHat = ({navigation, route}: Props) => {
         <Field
           component={AppFormField}
           name="state"
-          placeholder={`${route.params.state}°`}
+          placeholder={`${hat.state}°`}
         />
         <Text style={styles.addHat__text}>Precio (S/.): </Text>
         <Field
           component={AppFormField}
           name="price"
-          placeholder={`S/.${route.params.price}`}
+          placeholder={`S/.${hat.price}`}
         />
         <Text style={styles.addHat__text}>Adelanto (S/.): </Text>
         <Field
           component={AppFormField}
           name="advancement"
-          placeholder={`S/.${route.params.advancement}`}
+          placeholder={`S/.${hat.advancement}`}
         />
         <Text style={styles.addHat__text}>Domicilio: </Text>
         <Field
           component={AppFormField}
           name="address"
-          placeholder={`${route.params.address}`}
+          placeholder={`${hat.address}`}
         />
         <Text style={styles.addHat__text}>Observaciones: </Text>
         <Field
           component={AppFormField}
           name="observations"
-          placeholder={`${route.params.observations}`}
+          placeholder={`${hat.observations}`}
         />
         <View style={styles.addHat__container}>
           <Text style={styles.addHat__text}>Estado Pago: </Text>
@@ -151,7 +148,7 @@ export const EdiHat = ({navigation, route}: Props) => {
         <Field
           component={AppFormField}
           name="state_payment"
-          placeholder={`${route.params.state_payment}`}
+          placeholder={`${hat.state_payment}`}
         />
         <AppFormSubmitButton title="Editar" />
       </AppForm>

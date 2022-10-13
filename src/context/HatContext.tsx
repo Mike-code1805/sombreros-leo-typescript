@@ -20,7 +20,7 @@ type HatsContextProps = {
 };
 
 const initialValueHat = {
-  _id: '',
+  _id: '1',
   address: '',
   advancement: '',
   cintillo: '',
@@ -61,7 +61,8 @@ export const HatsProvider = ({children}: any) => {
   };
 
   const updateHat = async (id: string, hat: HatProps) => {
-    const data = await editHatService(id, hat);
+    await editHatService(id, hat);
+    const data = await getHatByIdService(id);
     setHats(
       hats.map(hat => {
         return hat._id === id ? data : hat;

@@ -163,7 +163,7 @@ export const Hats = ({navigation}: Props) => {
                     date={item.date}
                     onPressMirar={() =>
                       navigation.dispatch(
-                        CommonActions.navigate('DetailsHat', item),
+                        CommonActions.navigate('DetailsHat', {_id: item._id}),
                       )
                     }
                     onPressDelete={() => onPressDelete(item)}

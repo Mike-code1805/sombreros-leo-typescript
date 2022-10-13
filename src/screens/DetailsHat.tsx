@@ -19,16 +19,11 @@ import {HatProps} from '../interfaces/interface';
 interface Props extends StackScreenProps<RootStackParams, 'DetailsHat'> {}
 
 export const DetailsHat = ({navigation, route}: Props) => {
-  const {loadHatById, hat} = useContext(HatsContext);
-  // const [hat, sethat] = useState<HatProps>();
+  const {loadHatById, hat} = useContext(HatsContext); 
 
   useEffect(() => {
-    getDetailsHat();
-  }, [route.params]);
-
-  const getDetailsHat = async () => {
-    await loadHatById(route.params._id!);
-  };
+    loadHatById(route.params._id!);
+  }, [hat]);
 
   const onPressState_Payment = async () => {
     try {
@@ -45,6 +40,10 @@ export const DetailsHat = ({navigation, route}: Props) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const goHats = () => {
+    navigation.navigate('Hats');
   };
 
   return (
@@ -156,6 +155,13 @@ export const DetailsHat = ({navigation, route}: Props) => {
           onPress={onPressDone}>
           <Icon name="hammer" color="white" size={23} />
           <Text style={styles.detailsButtons__style__text}>Trabajado</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.prdetailsButtons__pay}
+          disabled={hat!.pendiente ? false : true}
+          onPress={goHats}>
+          <Icon name="thumbs-up" color="red" size={23} />
+          <Text style={styles.detailsButtons__style__text}>Volver</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
