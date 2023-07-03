@@ -1,2 +1,2 @@
 # sombreros-leo-typescript
- REACT-NATIVE
+ REACT-NATIVE-CLI
